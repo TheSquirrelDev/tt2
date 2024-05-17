@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  
+  <PropertyGroup>
+    <AssemblyTitle>IOInfo Extensions</AssemblyTitle>
+    <Description>Provides extension methods to the System.IO.FileInfo and System.IO.DirectoryInfo classes.</Description>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>IOInfoExtensions</AssemblyName>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <Title>Provides extension methods to the System.IO.FileInfo and System.IO.DirectoryInfo classes.</Title>
+    <Authors>$(AssemblyName), Andrew Strickland</Authors>
+    <Copyright>Copyright(c) 2024 Andrew Strickland</Copyright>
+    <PackageProjectUrl>https://github.com/AndrewStrickland/IOInfoExtensions</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/AndrewStrickland/IOInfoExtensions</RepositoryUrl>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
+    <RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
+    <Version>0.0.5</Version>
+  </PropertyGroup>
+  
+</Project>
