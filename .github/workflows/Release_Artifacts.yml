@@ -24,9 +24,9 @@ jobs:
     - name: Pack c#
       run: dotnet pack -c Release --no-build --output . IOInfoExtensions
     - name: Publish c# Module
-      run: dotnet nuget push "*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/TheSquirrelDev/tt2/index.json"
+      run: dotnet nuget push "*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/TheSquirrelDev/index.json"
     - name: Publish PowerShell Module
       shell: pwsh
       run: |-
         .\Copy-ModuleFiles -BinaryOutputDirectory .\IOInfoExtensions\bin\Release\netstandard2.0 -ProjectDirectory .\IOInfoExtensions.PowerShell -ModuleRootDirectory .\Output -Verbose
-        Publish-Module -Path .\Output -Repository "https://nuget.pkg.github.com/TheSquirrelDev/tt2/index.json" -NuGetApiKey ${{ secrets.GITHUB_TOKEN }}
+        Publish-Module -Path .\Output -Repository "https://nuget.pkg.github.com/TheSquirrelDev/index.json" -NuGetApiKey ${{ secrets.GITHUB_TOKEN }}
