@@ -28,5 +28,5 @@ jobs:
     - name: Publish PowerShell Module
       shell: pwsh
       run: |-
-        .\Copy-ModuleFiles -BinaryOutputDirectory .\IOInfoExtensions\bin\Release\netstandard2.0 -ProjectDirectory .\IOInfoExtensions.PowerShell -ModuleRootDirectory .\Output -Verbose
+        .\Copy-ModuleFiles.ps1 -BinaryOutputDirectory .\IOInfoExtensions\bin\Release\netstandard2.0 -ProjectDirectory .\IOInfoExtensions.PowerShell -ModuleRootDirectory .\Output -Verbose
         Publish-Module -Path .\Output -Repository "https://nuget.pkg.github.com/TheSquirrelDev/index.json" -NuGetApiKey ${{ secrets.GITHUB_TOKEN }}
