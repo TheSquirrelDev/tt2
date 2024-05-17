@@ -1,0 +1,32 @@
+name: Release Artifacts
+
+on:
+  # release:
+  #   types: [published]
+  [pull_request]
+
+permissions:
+    packages: write
+    
+jobs:
+  Build_and_Release:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build -c Release --no-restore --verbosity normal
+    - name: Pack c#
+      run: dotnet pack -c Release --no-build --output . IOInfoExtensions
+    - name: Publish c# Module
+      run: dotnet nuget push "*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/TheSquirrelDev/tt2/index.json"
+    - name: Publish PowerShell Module
+      shell: pwsh
+      run: |-
+        .\Copy-ModuleFiles -BinaryOutputDirectory .\IOInfoExtensions\bin\Release\netstandard2.0 -ProjectDirectory .\IOInfoExtensions.PowerShell -ModuleRootDirectory .\Output -Verbose
+        Publish-Module -Path .\Output -Repository "https://nuget.pkg.github.com/TheSquirrelDev/tt2/index.json" -NuGetApiKey ${{ secrets.GITHUB_TOKEN }}
