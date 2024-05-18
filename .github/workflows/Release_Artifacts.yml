@@ -33,4 +33,4 @@ jobs:
         $repoName = "TheSquirrelDev"
         $url = "https://nuget.pkg.github.com/$repoName/index.json"
         Register-PSRepository -Name $repoName -SourceLocation $url -PublishLocation $url -InstallationPolicy Trusted -Verbose 
-        Publish-Module -Path .\Output -Repository $repoName -NuGetApiKey ${{ secrets.GITHUB_TOKEN }}
+        Publish-Module -Path .\Output\Module -Repository $repoName -NuGetApiKey ${{ secrets.GITHUB_TOKEN }}
