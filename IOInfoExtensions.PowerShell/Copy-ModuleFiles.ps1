@@ -20,7 +20,7 @@ Write-Verbose "Initial ModuleRootDirectory: $ModuleRootDirectory"
 
 $BinaryOutputDirectory = Resolve-Path -Path $BinaryOutputDirectory
 $ProjectDirectory = Resolve-Path -Path $ProjectDirectory
-$moduleDirectory = Join-Path -Path $ModuleRootDirectory -ChildPath 'Module'
+$moduleDirectory = Join-Path -Path $ModuleRootDirectory -ChildPath 'IOInfoExtensions'
 if (-not (Test-Path -Path $moduleDirectory))
 {
 	$null = New-Item -Path $moduleDirectory -ItemType Directory
