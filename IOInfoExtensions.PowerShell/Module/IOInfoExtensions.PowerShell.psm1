@@ -1,7 +1,7 @@
 <#
 
 #
-# Script module for module 'IOInfoExtensions'
+# Script module for module 'IOInfoExtensions.PowerShell'
 #
 Set-StrictMode -Version Latest
 
