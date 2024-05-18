@@ -29,4 +29,8 @@ jobs:
       shell: pwsh
       run: |
         .\IOInfoExtensions.PowerShell\Copy-ModuleFiles.ps1 -BinaryOutputDirectory .\IOInfoExtensions\bin\Release\netstandard2.0 -ProjectDirectory .\IOInfoExtensions.PowerShell -ModuleRootDirectory .\Output -Verbose
-        Publish-Module -Path .\Output -Repository "https://nuget.pkg.github.com/TheSquirrelDev/index.json" -NuGetApiKey ${{ secrets.GITHUB_TOKEN }}
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        $repoName = "TheSquirrelDev"
+        $url = "https://nuget.pkg.github.com/$repoName/index.json"
+        Register-PSRepository -Name $repoName -SourceLocation $url -PublishLocation $url -InstallationPolicy Trusted -Verbose 
+        Publish-Module -Path .\Output -Repository $repoName -NuGetApiKey ${{ secrets.GITHUB_TOKEN }}
