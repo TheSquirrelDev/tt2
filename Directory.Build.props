@@ -1,0 +1,17 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>Provides extension methods to the System.IO.FileInfo and System.IO.DirectoryInfo classes.</Description>
+    <Title>Provides extension methods to the System.IO.FileInfo and System.IO.DirectoryInfo classes via a PowerShell module.</Title>
+    <Authors>$(AssemblyName), Andrew Strickland</Authors>
+    <Copyright>Copyright(c) 2024 Andrew Strickland</Copyright>
+    <PackageProjectUrl>https://github.com/APStrickland/IOInfoExtensions</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/APStrickland/IOInfoExtensions</RepositoryUrl>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <Version>0.0.6</Version>
+    <FileVersion>0.0.6</FileVersion>
+    <ProductVersion>0.1.0</ProductVersion>
+  </PropertyGroup>
+</Project>

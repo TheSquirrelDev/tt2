@@ -59,5 +59,13 @@ $moduleSource |
 
 Write-Verbose "Copying binary files from $BinaryOutputDirectory"
 $BinaryOutputDirectory | 
-	Get-ChildItem -Filter 'IOInfoExtensions.PowerShell.dll' |
+	Get-ChildItem -Filter 'IOInfoExtensions.*dll' |
 	Copy-Item -Destination $moduleDirectory
+
+$dll = Get-ChildItem -Path $moduleDirectory -Filter 'IOInfoExtensions.PowerShell.dll'
+$productVersion = $dll.VersionInfo.ProductVersion.Split('+')[0]
+
+Write-Verbose "Setting ModuleVersion to $productVersion"
+$psd1 = Get-ChildItem -Path $moduleDirectory -Filter '*.psd1'
+(Get-Content -Path $psd1.FullName) -replace "ModuleVersion = '\d+\.\d+\.\d+'", "ModuleVersion = '$productVersion'" |
+	Set-Content -Path $psd1.FullName

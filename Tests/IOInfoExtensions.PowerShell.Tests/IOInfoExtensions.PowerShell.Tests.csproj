@@ -63,7 +63,7 @@
   </ItemGroup>
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="pwsh $(MSBuildProjectDirectory)/../../IOInfoExtensions.PowerShell/Copy-ModuleFiles.ps1 -BinaryOutputDirectory $(OutDir) -ProjectDirectory $(ProjectDir) -ModuleRootDirectory $(OutDir) -Verbose" />
+    <Exec Command="pwsh $(MSBuildProjectDirectory)/../../IOInfoExtensions.PowerShell/Copy-ModuleFiles.ps1 -BinaryOutputDirectory $(OutDir) -ProjectDirectory $(ProjectDir) -ModuleRootDirectory $(OutDir)" />
   </Target>
   
 </Project>

@@ -1,16 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyTitle>IOInfo Extensions for PowerShell</AssemblyTitle>
     <AssemblyName>IOInfoExtensions.PowerShell</AssemblyName>
-    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
-    <EnableNETAnalyzers>True</EnableNETAnalyzers>
-    <AnalysisLevel>latest</AnalysisLevel>
-    <Title>Provides extension methods to the System.IO.FileInfo and System.IO.DirectoryInfo classes via a PowerShell module.</Title>
-    <Authors>$(AssemblyName), Andrew Strickland</Authors>
-    <Copyright>Copyright(c) 2024 Andrew Strickland</Copyright>
-    <PackageProjectUrl>https://github.com/AndrewStrickland/IOInfoExtensions</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/AndrewStrickland/IOInfoExtensions</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -43,7 +35,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="pwsh $(MSBuildProjectDirectory)/Copy-ModuleFiles.ps1 -BinaryOutputDirectory $(OutDir) -ProjectDirectory $(ProjectDir) -ModuleRootDirectory $(OutDir) -Verbose"/>
+    <Exec Command="pwsh $(MSBuildProjectDirectory)/Copy-ModuleFiles.ps1 -BinaryOutputDirectory $(OutDir) -ProjectDirectory $(ProjectDir) -ModuleRootDirectory $(OutDir)"/>
   </Target>
 
 </Project>
