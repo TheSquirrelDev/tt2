@@ -24,13 +24,10 @@ jobs:
     - name: Pack c#
       run: dotnet pack -c Release --no-build --output . IOInfoExtensions
     - name: Publish c# Module
-      run: dotnet nuget push "*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/TheSquirrelDev/index.json" --skip-duplicate
+      run: dotnet nuget push "*.nupkg" --api-key ${{ secrets.NUGET }} --source https://api.nuget.org/v3/index.json
     - name: Publish PowerShell Module
       shell: pwsh
       run: |
-        .\IOInfoExtensions.PowerShell\Copy-ModuleFiles.ps1 -BinaryOutputDirectory .\IOInfoExtensions.PowerShell\bin\Release\netstandard2.0 -ProjectDirectory .\IOInfoExtensions.PowerShell -ModuleRootDirectory .\Output -Verbose
+        .\IOInfoExtensions.PowerShell\Copy-ModuleFiles.ps1 -BinaryOutputDirectory .\IOInfoExtensions.PowerShell\bin\Release\netstandard2.0 -ProjectDirectory .\IOInfoExtensions.PowerShell -ModuleRootDirectory .\Output
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        $repoName = "TheSquirrelDev"
-        $url = "https://nuget.pkg.github.com/$repoName/index.json"
-        Register-PSRepository -Name $repoName -SourceLocation $url -PublishLocation $url -InstallationPolicy Trusted -Verbose 
-        Publish-Module -Path .\Output\IOInfoExtensions.PowerShell -Repository $repoName -NuGetApiKey ${{ secrets.GITHUB_TOKEN }}
+        $null = Publish-Module -Path .\Output\IOInfoExtensions.PowerShell -NuGetApiKey ${{ secrets.POWERSHELL }}
