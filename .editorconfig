@@ -1,3 +1,4 @@
+root = true
 
 [*.{asax,ascx,aspx,axaml,cs,cshtml,htm,html,master,paml,razor,skin,vb,xaml,xamlx,xoml}]
 indent_style = space
@@ -386,7 +387,7 @@ dotnet_style_qualification_for_field = false:suggestion
 dotnet_style_qualification_for_method = false:suggestion
 dotnet_style_qualification_for_property = false:suggestion
 dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
-file_header_template = 
+file_header_template =
 
 # CUSTOM
 dotnet_diagnostic.CA1416.severity = silent
@@ -428,7 +429,7 @@ dotnet_diagnostic.S3060.severity = warning
 # S3237: Blocker :: "value" parameters should be used
 dotnet_diagnostic.S3237.severity = warning
 
-# S3427: Blocker :: Method overloads with default parameter values should not overlap 
+# S3427: Blocker :: Method overloads with default parameter values should not overlap
 dotnet_diagnostic.S3427.severity = warning
 
 # S3433: Blocker :: Test method signatures should be correct
@@ -812,7 +813,7 @@ dotnet_diagnostic.S3909.severity = warning
 # S3925: Major :: "ISerializable" should be implemented correctly
 dotnet_diagnostic.S3925.severity = warning
 
-# S3928: Major :: Parameter names used into ArgumentException constructors should match an existing one 
+# S3928: Major :: Parameter names used into ArgumentException constructors should match an existing one
 dotnet_diagnostic.S3928.severity = warning
 
 # S3956: Major :: "Generic.List" instances should not be part of public APIs
@@ -1334,7 +1335,7 @@ dotnet_diagnostic.S3244.severity = error
 # S3249: Major :: Classes directly extending "object" should not call "base" in "GetHashCode" or "Equals"
 dotnet_diagnostic.S3249.severity = error
 
-# S3263: Major :: Static fields should appear in the order they must be initialized 
+# S3263: Major :: Static fields should appear in the order they must be initialized
 dotnet_diagnostic.S3263.severity = error
 
 # S3343: Major :: Caller information parameters should come at the end of the parameter list
@@ -1352,7 +1353,7 @@ dotnet_diagnostic.S3466.severity = error
 # S3598: Major :: One-way "OperationContract" methods should have "void" return type
 dotnet_diagnostic.S3598.severity = error
 
-# S3603: Major :: Methods with "Pure" attribute should return a value 
+# S3603: Major :: Methods with "Pure" attribute should return a value
 dotnet_diagnostic.S3603.severity = error
 
 # S3610: Major :: Nullable type comparison should not be redundant
@@ -1602,3 +1603,8 @@ csharp_style_throw_expression = true:warning
 dotnet_style_operator_placement_when_wrapping = beginning_of_line
 csharp_indent_labels = no_change
 csharp_prefer_simple_default_expression = true:suggestion
+
+[Tests/**/*.cs]
+dotnet_diagnostic.IDE0028.severity = none
+dotnet_analyzer_diagnostic.category-Style.severity = none
+dotnet_diagnostic.IDE0300.severity = none

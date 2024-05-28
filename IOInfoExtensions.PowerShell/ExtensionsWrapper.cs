@@ -3,13 +3,16 @@ using System.Management.Automation;
 
 namespace IOInfoExtensions.PowerShell
 {
+    /// <summary>
+    ///     Static methods that wrap the IOInfoExtensions methods for use in PowerShell. 
+    /// </summary>
     public static class ExtensionsWrapper
     {
         #region DirectoryInfo
         /// <summary>
         ///     PowerShell wrapper for the GetDirectory method.
         /// </summary>
-        /// <inheritdoc cref="GetDirectory(DirectoryInfo, string, bool, bool)"/>
+        /// <inheritdoc cref="DirectoryInfoExtensions.GetDirectory(DirectoryInfo, string, bool, bool)"/>
         /// <exception cref="PSInvalidOperationException"></exception>
         public static DirectoryInfo PSGetDirectory(PSObject directory, string name, bool resolve = false, bool ignoreCase = true) =>
             directory.BaseObject is DirectoryInfo directoryInfo
@@ -19,7 +22,7 @@ namespace IOInfoExtensions.PowerShell
         /// <summary>
         ///    PowerShell wrapper for the GetFile method.
         /// </summary>
-        /// <inhertidoc cref="GetFile(DirectoryInfo, string, bool, bool)"/>
+        /// <inhertidoc cref="DirectoryInfoExtensions.GetFile(DirectoryInfo, string, bool, bool)"/>
         /// <exception cref="PSInvalidOperationException"></exception>
         public static FileInfo PSGetFile(PSObject directory, string name, bool resolve = false, bool ignoreCase = true) =>
             directory.BaseObject is DirectoryInfo directoryInfo
@@ -29,7 +32,7 @@ namespace IOInfoExtensions.PowerShell
         /// <summary>
         ///   PowerShell wrapper for the DeleteContent method.
         /// </summary>
-        /// <inheritdoc cref="DeleteContent(DirectoryInfo)"/>/>
+        /// <inheritdoc cref="DirectoryInfoExtensions.DeleteContent(DirectoryInfo)"/>/>
         /// <exception cref="PSInvalidOperationException"></exception>
         public static object PSDeleteContent(PSObject directory)
         {
@@ -48,7 +51,7 @@ namespace IOInfoExtensions.PowerShell
         /// <summary>
         ///  PowerShell wrapper for the CopyContentTo method.
         /// </summary>
-        /// <inheritdoc cref="CopyContentTo(DirectoryInfo, DirectoryInfo, bool, bool, bool)"/>
+        /// <inheritdoc cref="DirectoryInfoExtensions.CopyContentTo(DirectoryInfo, DirectoryInfo, bool, bool, bool)"/>
         /// <exception cref="PSInvalidOperationException"></exception>
         public static object PSCopyContentTo(PSObject source, PSObject destination, bool copyEmptyDirectories = false, bool overwrite = false, bool cleanTarget = false)
         {
@@ -69,7 +72,7 @@ namespace IOInfoExtensions.PowerShell
         /// <summary>
         ///     PowerShell wrapper for the FileInfo.MoveFrom method.
         /// </summary>
-        /// <inheritdoc cref="MoveFrom(FileInfo, FileInfo, bool)"/>
+        /// <inheritdoc cref="FileInfoExtensions.MoveFrom(FileInfo, FileInfo, bool)"/>
         /// <exception cref="PSInvalidOperationException"></exception>
         public static object PSMoveFrom(PSObject destination, PSObject source, bool overwrite = false)
         {
@@ -88,7 +91,7 @@ namespace IOInfoExtensions.PowerShell
         /// <summary>
         ///    PowerShell wrapper for the FileInfo.CopyFrom method.
         /// </summary>
-        /// <inheritdoc cref="CopyFrom(FileInfo, FileInfo, bool)"/>
+        /// <inheritdoc cref="FileInfoExtensions.CopyFrom(FileInfo, FileInfo, bool)"/>
         /// <exception cref="PSInvalidOperationException"></exception>
         public static object PSCopyFrom(PSObject destination, PSObject source, bool overwrite = false)
         {
@@ -107,7 +110,7 @@ namespace IOInfoExtensions.PowerShell
         /// <summary>
         ///    PowerShell wrapper for the FileInfo.TryDelete method.
         /// </summary>
-        /// <inheritdoc cref="TryDelete(FileInfo)"/>
+        /// <inheritdoc cref="FileInfoExtensions.TryDelete(FileInfo)"/>
         /// <exception cref="PSInvalidOperationException"></exception>
         public static object PSTryDelete(PSObject file)
         {

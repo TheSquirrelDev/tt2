@@ -11,7 +11,7 @@ namespace IOInfoExtensions.PowerShell.Tests.Helpers
 
         public PSTestBase() : base()
         {
-            modulePath = Path.Combine(testRootDirectory.Parent.FullName, "Module", "IOInfoExtensions.psd1");
+            modulePath = Path.Combine(testRootDirectory.Parent.FullName, "IOInfoExtensions.PowerShell", "IOInfoExtensions.PowerShell.psd1");
 
 #if PSV74
             psVersion = new Version(7, 4);

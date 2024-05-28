@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using Xunit;
 
-namespace IOInfoExtensions.Test.PowerShell
+namespace IOInfoExtensions.Tests.PowerShell
 {
     public class PSDirectoryInfoExtensionsTests : PSTestBase
     {
@@ -115,7 +115,7 @@ namespace IOInfoExtensions.Test.PowerShell
 #if PSV51
                 expectedMessage = expectedMessage += Environment.NewLine + "Parameter name: name";
 #else
-                expectedMessage = expectedMessage += " (Parameter 'name')"; 
+                expectedMessage = expectedMessage += " (Parameter 'name')";
 #endif
             }
 

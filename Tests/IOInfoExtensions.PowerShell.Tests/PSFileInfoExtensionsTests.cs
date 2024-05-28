@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using Xunit;
 
-namespace IOInfoExtensions.Test.PowerShell
+namespace IOInfoExtensions.Tests.PowerShell
 {
     public class PSFileInfoExtensionsTests : PSTestBase
     {

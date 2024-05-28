@@ -3,6 +3,7 @@
   <PropertyGroup>
     <AssemblyTitle>IOInfo Extensions for PowerShell</AssemblyTitle>
     <AssemblyName>IOInfoExtensions.PowerShell</AssemblyName>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,7 +36,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="pwsh $(MSBuildProjectDirectory)/Copy-ModuleFiles.ps1 -BinaryOutputDirectory $(OutDir) -ProjectDirectory $(ProjectDir) -ModuleRootDirectory $(OutDir)"/>
+    <Exec Command="pwsh $(MSBuildProjectDirectory)/Copy-ModuleFiles.ps1 -BinaryOutputDirectory $(OutDir) -ProjectDirectory $(ProjectDir) -ModuleRootDirectory $(OutDir)" />
   </Target>
 
 </Project>

@@ -12,11 +12,29 @@ namespace IOInfoExtensions
         /// <summary>
         ///     Returns a DirectoryInfo object for the child directory with the specified name.
         /// </summary>
+        /// <remarks>
+        ///     Creates a new DirectoryInfo object representing a child directory of the calling DirectoryInfo object that
+        ///     has the specified name. The newly created DirectoryInfo object will be checked against the remaining parameters
+        ///     as specified then returned. Specifying nested directories in the name is supported.
+        /// </remarks>
         /// <param name="directory">The calling DirectoryInfo object that will be the parent of the returned DirectoryInfo object.</param>
         /// <param name="name">The name of the child directory to return.</param>
         /// <param name="resolve">If set to true, it will throw an error if a matching child directory is not found.</param>
         /// <param name="ignoreCase">If set to false, it will throw an error if a matching child directory is found but with a different case.</param>
         /// <returns>System.IO.DirectoryInfo</returns>
+        /// <example>
+        ///     This returns a DirectoryInfo object for the child directory named "ChildDirectory" in the given directory.
+        ///     <code language="csharp">
+        ///         var rootDirectory = new DirectoryInfo("C:\\");
+        ///         var childDirectory = rootDirectory.GetDirectory("ChildDirectory");
+        ///         Console.WriteLine(childDirectory.FullName); // Output: C:\ChildDirectory
+        ///     </code>
+        ///     <code language="powershell">
+        ///         $rootDirectory = New-Object -TypeName System.IO.DirectoryInfo -ArgumentList "C:\"
+        ///         $childDirectory = $rootDirectory.GetDirectory("ChildDirectory")
+        ///         $childDirectory.FullName # Output: C:\ChildDirectory
+        ///     </code>
+        /// </example>
         /// <exception cref="ArgumentException">If the given name is null, empty, or just whitespace.</exception>
         /// <exception cref="Exception">If the given name matched multiple child items. This will happen if a wildcard was passed as part of the name.</exception>
         /// <exception cref="DirectoryNotFoundException">If the given name resolves to a child File, if Resolve=true and the child directory does not exist, or if MatchCase=true and the casing doesn't match.</exception>

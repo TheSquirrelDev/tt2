@@ -1,17 +1,17 @@
 [CmdletBinding()]
 param
 (
-	[Parameter(Mandatory = $true)]
-	[string]
-	$BinaryOutputDirectory,
+    [Parameter(Mandatory = $true)]
+    [string]
+    $BinaryOutputDirectory,
 
-	[Parameter(Mandatory = $true)]
-	[string]
-	$ProjectDirectory,
+    [Parameter(Mandatory = $true)]
+    [string]
+    $ProjectDirectory,
 
-	[Parameter(Mandatory = $true)]
-	[string]
-	$ModuleRootDirectory
+    [Parameter(Mandatory = $true)]
+    [string]
+    $ModuleRootDirectory
 )
 
 Write-Verbose "Initial BinaryOutputDirectory: $BinaryOutputDirectory"
@@ -23,7 +23,7 @@ $ProjectDirectory = Resolve-Path -Path $ProjectDirectory
 $moduleDirectory = Join-Path -Path $ModuleRootDirectory -ChildPath 'IOInfoExtensions.PowerShell'
 if (-not (Test-Path -Path $moduleDirectory))
 {
-	$null = New-Item -Path $moduleDirectory -ItemType Directory
+    $null = New-Item -Path $moduleDirectory -ItemType Directory
 }
 
 $moduleDirectory = Resolve-Path -Path $moduleDirectory
@@ -36,31 +36,31 @@ $solutionDirectory = $null
 $currentDirectory = $ProjectDirectory
 while ($null -eq $solutionDirectory)
 {
-	if (Get-ChildItem -Path $currentDirectory -Filter '*.sln')
-	{
-		$solutionDirectory = $currentDirectory
-	}
-	else
-	{
-		$currentDirectory = Split-Path -Path $currentDirectory -Parent
-	}
+    if (Get-ChildItem -Path $currentDirectory -Filter '*.sln')
+    {
+        $solutionDirectory = $currentDirectory
+    }
+    else
+    {
+        $currentDirectory = Split-Path -Path $currentDirectory -Parent
+    }
 }
 
 $moduleSource = Join-Path -Path $solutionDirectory -ChildPath 'IOInfoExtensions.PowerShell\Module' -Resolve
 if ($moduleSource -eq $moduleDirectory)
 {
-	throw "ModuleDirectory cannot be the same as the module source directory"
+    throw "ModuleDirectory cannot be the same as the module source directory"
 }
 
 Write-Verbose "Copying module files from $moduleSource"
 $moduleSource |
-	Get-ChildItem |
-	Copy-Item -Destination $moduleDirectory
+    Get-ChildItem |
+    Copy-Item -Destination $moduleDirectory
 
 Write-Verbose "Copying binary files from $BinaryOutputDirectory"
-$BinaryOutputDirectory | 
-	Get-ChildItem -Filter 'IOInfoExtensions.*dll' |
-	Copy-Item -Destination $moduleDirectory
+$BinaryOutputDirectory |
+    Get-ChildItem -Filter 'IOInfoExtensions.*dll*' |
+    Copy-Item -Destination $moduleDirectory
 
 $dll = Get-ChildItem -Path $moduleDirectory -Filter 'IOInfoExtensions.PowerShell.dll'
 $productVersion = $dll.VersionInfo.ProductVersion.Split('+')[0]
@@ -68,4 +68,4 @@ $productVersion = $dll.VersionInfo.ProductVersion.Split('+')[0]
 Write-Verbose "Setting ModuleVersion to $productVersion"
 $psd1 = Get-ChildItem -Path $moduleDirectory -Filter '*.psd1'
 (Get-Content -Path $psd1.FullName) -replace "ModuleVersion = '\d+\.\d+\.\d+'", "ModuleVersion = '$productVersion'" |
-	Set-Content -Path $psd1.FullName
+    Set-Content -Path $psd1.FullName
