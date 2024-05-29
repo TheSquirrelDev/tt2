@@ -13,13 +13,13 @@ namespace IOInfoExtensions.PowerShell.Tests.Helpers
             var results = string.Empty;
             using (var shell = System.Management.Automation.PowerShell.Create() ?? throw new Exception("Unable to create PowerShell instance."))
             {
-                shell.AddScript("Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force");
-                shell.Invoke();
+                _ = shell.AddScript("Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force");
+                _ = shell.Invoke();
 
                 shell.Commands?.Clear();
                 shell.Streams?.ClearStreams();
 
-                shell.AddScript($"Write-Output \"$($PSVersionTable.PSVersion)\"");
+                _ = shell.AddScript($"Write-Output \"$($PSVersionTable.PSVersion)\"");
 
                 var output = shell.EndInvoke(shell.BeginInvoke());
                 results = output.ReadAll().FirstOrDefault()?.ToString() ?? string.Empty;
@@ -33,14 +33,14 @@ namespace IOInfoExtensions.PowerShell.Tests.Helpers
             var results = new PowerShellExecutionResults();
             using (var shell = System.Management.Automation.PowerShell.Create() ?? throw new Exception("Unable to create PowerShell instance."))
             {
-                shell.AddScript("Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force");
-                shell.Invoke();
+                _ = shell.AddScript("Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force");
+                _ = shell.Invoke();
 
                 shell.Commands?.Clear();
                 shell.Streams?.ClearStreams();
 
-                shell.AddScript($"Import-Module -Name {modulePath}");
-                shell.AddScript(script);
+                _ = shell.AddScript($"Import-Module -Name {modulePath}");
+                _ = shell.AddScript(script);
 
                 var output = shell.EndInvoke(shell.BeginInvoke());
                 output.Where(x => x != null && x.BaseObject is Hashtable).ToList().ForEach(x =>

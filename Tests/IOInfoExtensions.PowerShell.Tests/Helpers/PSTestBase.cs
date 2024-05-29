@@ -13,15 +13,15 @@ namespace IOInfoExtensions.PowerShell.Tests.Helpers
         {
             modulePath = Path.Combine(testRootDirectory.Parent.FullName, "IOInfoExtensions.PowerShell", "IOInfoExtensions.PowerShell.psd1");
 
-#if PSV74
-            psVersion = new Version(7, 4);
-#elif PSV73
-            psVersion = new Version(7, 3);
-#elif PSV72
-            psVersion = new Version(7, 2);
-#elif PSV51
-            psVersion = new Version(5, 1);
-#endif
+            #if PSV74
+                psVersion = new Version(7, 4);
+            #elif PSV73
+                psVersion = new Version(7, 3);
+            #elif PSV72
+                psVersion = new Version(7, 2);
+            #elif PSV51
+                psVersion = new Version(5, 1);
+            #endif
 
             var version = PowerShellHelper.GetPowerShellVersion();
             if (!version.StartsWith($"{psVersion.Major}.{psVersion.Minor}"))

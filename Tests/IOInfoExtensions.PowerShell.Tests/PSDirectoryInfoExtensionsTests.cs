@@ -24,19 +24,19 @@ namespace IOInfoExtensions.Tests.PowerShell
             // Arrange
             var expectedPath = Path.Combine(sourceRootDirectory.FullName, expected);
             var script = new StringBuilder();
-            script.AppendLine($"$directory = New-Object -TypeName System.IO.DirectoryInfo '{sourceRootDirectory.FullName}'");
-            script.AppendLine($"$child = $directory.GetDirectory('{childDirName}', ${resolve}, ${ignoreCase})");
-            script.AppendLine($"@{{Purpose = 'DesiredChild'; TypeName = $child.GetType().FullName; FullName = $child.FullName; Exists = $child.Exists}}");
+            _ = script.AppendLine($"$directory = New-Object -TypeName System.IO.DirectoryInfo '{sourceRootDirectory.FullName}'");
+            _ = script.AppendLine($"$child = $directory.GetDirectory('{childDirName}', ${resolve}, ${ignoreCase})");
+            _ = script.AppendLine($"@{{Purpose = 'DesiredChild'; TypeName = $child.GetType().FullName; FullName = $child.FullName; Exists = $child.Exists}}");
 
             // Act
             var results = PowerShellHelper.RunPowerShellScript(modulePath, script.ToString());
 
             // Assert
-            results.Errors.Should().BeNullOrEmpty();
+            _ = results.Errors.Should().BeNullOrEmpty();
             var desiredChild = results.Items.First(x => x.Purpose == "DesiredChild");
-            desiredChild.TypeName.Should().Be("System.IO.DirectoryInfo");
-            desiredChild.FullName.Should().Be(expectedPath);
-            desiredChild.Exists.Should().Be(exists);
+            _ = desiredChild.TypeName.Should().Be("System.IO.DirectoryInfo");
+            _ = desiredChild.FullName.Should().Be(expectedPath);
+            _ = desiredChild.Exists.Should().Be(exists);
         }
 
         [Theory]
@@ -49,20 +49,22 @@ namespace IOInfoExtensions.Tests.PowerShell
         [InlineData("ChildDir3", true, false, "Cannot find child 'ChildDir3' because it does not exist and resolve was set to true.", false)]
         public void PSGetDirectoryThrowsException(string childDirName, bool resolve, bool ignoreCase, string expectedMessage, bool incompleteMessage)
         {
+            #pragma warning disable S1854 // Unused assignments should be removed - They are used under certain preprocessor  directives
             // Arrange
             if (incompleteMessage)
             {
-#if PSV51
-                expectedMessage = expectedMessage += Environment.NewLine + "Parameter name: name";
-#else
-                expectedMessage = expectedMessage += " (Parameter 'name')";
-#endif
+                #if PSV51
+                    expectedMessage = expectedMessage += Environment.NewLine + "Parameter name: name";
+                #else
+                    expectedMessage = expectedMessage += " (Parameter 'name')";
+                #endif
             }
+            #pragma warning restore S1854 // Unused assignments should be removed
 
             var script = new StringBuilder();
-            script.AppendLine($"$directory = New-Object -TypeName System.IO.DirectoryInfo '{sourceRootDirectory.FullName}'");
-            script.AppendLine($"$child = $directory.GetDirectory('{childDirName}', ${resolve}, ${ignoreCase})");
-            script.AppendLine($"@{{Purpose = 'DesiredChild'; TypeName = $child.GetType().FullName; FullName = $child.FullName; Exists = $child.Exists}}");
+            _ = script.AppendLine($"$directory = New-Object -TypeName System.IO.DirectoryInfo '{sourceRootDirectory.FullName}'");
+            _ = script.AppendLine($"$child = $directory.GetDirectory('{childDirName}', ${resolve}, ${ignoreCase})");
+            _ = script.AppendLine($"@{{Purpose = 'DesiredChild'; TypeName = $child.GetType().FullName; FullName = $child.FullName; Exists = $child.Exists}}");
 
             // Act
             var results = PowerShellHelper.RunPowerShellScript(modulePath, script.ToString());
@@ -84,19 +86,19 @@ namespace IOInfoExtensions.Tests.PowerShell
             // Arrange
             var expectedPath = Path.Combine(sourceRootDirectory.FullName, expected);
             var script = new StringBuilder();
-            script.AppendLine($"$directory = New-Object -TypeName System.IO.DirectoryInfo '{sourceRootDirectory.FullName}'");
-            script.AppendLine($"$child = $directory.GetFile('{childFileName}', ${resolve}, ${ignoreCase})");
-            script.AppendLine($"@{{Purpose = 'DesiredChild'; TypeName = $child.GetType().FullName; FullName = $child.FullName; Exists = $child.Exists}}");
+            _ = script.AppendLine($"$directory = New-Object -TypeName System.IO.DirectoryInfo '{sourceRootDirectory.FullName}'");
+            _ = script.AppendLine($"$child = $directory.GetFile('{childFileName}', ${resolve}, ${ignoreCase})");
+            _ = script.AppendLine($"@{{Purpose = 'DesiredChild'; TypeName = $child.GetType().FullName; FullName = $child.FullName; Exists = $child.Exists}}");
 
             // Act
             var results = PowerShellHelper.RunPowerShellScript(modulePath, script.ToString());
 
             // Assert
-            results.Errors.Should().BeNullOrEmpty();
+            _ = results.Errors.Should().BeNullOrEmpty();
             var desiredChild = results.Items.First(x => x.Purpose == "DesiredChild");
-            desiredChild.TypeName.Should().Be("System.IO.FileInfo");
-            desiredChild.FullName.Should().Be(expectedPath);
-            desiredChild.Exists.Should().Be(exists);
+            _ = desiredChild.TypeName.Should().Be("System.IO.FileInfo");
+            _ = desiredChild.FullName.Should().Be(expectedPath);
+            _ = desiredChild.Exists.Should().Be(exists);
         }
 
         [Theory]
@@ -109,15 +111,17 @@ namespace IOInfoExtensions.Tests.PowerShell
         [InlineData("ChildFile3.txt", true, false, "Cannot find child 'ChildFile3.txt' because it does not exist and resolve was set to true.", false)]
         public void PSGetFileThrowsException(string childFileName, bool resolve, bool ignoreCase, string expectedMessage, bool incompleteMessage)
         {
+            #pragma warning disable S1854 // Unused assignments should be removed - They are used under certain preprocessor  directives
             // Arrange
             if (incompleteMessage)
             {
-#if PSV51
-                expectedMessage = expectedMessage += Environment.NewLine + "Parameter name: name";
-#else
-                expectedMessage = expectedMessage += " (Parameter 'name')";
-#endif
+                #if PSV51
+                    expectedMessage = expectedMessage += Environment.NewLine + "Parameter name: name";
+                #else
+                    expectedMessage = expectedMessage += " (Parameter 'name')";
+                #endif
             }
+            #pragma warning restore S1854 // Unused assignments should be removed
 
             var script = new StringBuilder();
             script.AppendLine($"$directory = New-Object -TypeName System.IO.DirectoryInfo '{sourceRootDirectory.FullName}'");
@@ -137,17 +141,17 @@ namespace IOInfoExtensions.Tests.PowerShell
         {
             // Arrange
             var script = new StringBuilder();
-            script.AppendLine($"$directory = New-Object -TypeName System.IO.DirectoryInfo '{sourceRootDirectory.FullName}'");
-            script.AppendLine($"$directory.DeleteContent()");
+            _ = script.AppendLine($"$directory = New-Object -TypeName System.IO.DirectoryInfo '{sourceRootDirectory.FullName}'");
+            _ = script.AppendLine($"$directory.DeleteContent()");
 
             // Act
             var results = PowerShellHelper.RunPowerShellScript(modulePath, script.ToString());
 
             // Assert
-            results.Errors.Should().BeNullOrEmpty();
-            sourceRootDirectory.Exists.Should().BeTrue();
-            sourceRootDirectory.GetDirectories().Should().BeEmpty();
-            sourceRootDirectory.GetFiles().Should().BeEmpty();
+            _ = results.Errors.Should().BeNullOrEmpty();
+            _ = sourceRootDirectory.Exists.Should().BeTrue();
+            _ = sourceRootDirectory.GetDirectories().Should().BeEmpty();
+            _ = sourceRootDirectory.GetFiles().Should().BeEmpty();
         }
 
         [Fact]
@@ -156,14 +160,14 @@ namespace IOInfoExtensions.Tests.PowerShell
             // Arrange
             var nonExistentDirectory = new DirectoryInfo(Path.Combine(sourceRootDirectory.FullName, "NonExistent"));
             var script = new StringBuilder();
-            script.AppendLine($"$directory = New-Object -TypeName System.IO.DirectoryInfo '{nonExistentDirectory}'");
-            script.AppendLine($"$directory.DeleteContent()");
+            _ = script.AppendLine($"$directory = New-Object -TypeName System.IO.DirectoryInfo '{nonExistentDirectory}'");
+            _ = script.AppendLine($"$directory.DeleteContent()");
 
             // Act
             var results = PowerShellHelper.RunPowerShellScript(modulePath, script.ToString());
 
             // Assert
-            results.Errors.Should().BeNullOrEmpty();
+            _ = results.Errors.Should().BeNullOrEmpty();
         }
 
         [Theory]
@@ -181,19 +185,19 @@ namespace IOInfoExtensions.Tests.PowerShell
             }
 
             var script = new StringBuilder();
-            script.AppendLine($"$source = New-Object -TypeName System.IO.DirectoryInfo '{sourceRootDirectory.FullName}'");
-            script.AppendLine($"$destination = New-Object -TypeName System.IO.DirectoryInfo '{destinationRootDirectory.FullName}'");
-            script.AppendLine($"$source.CopyContentTo($destination, ${copyEmpty}, ${overwrite}, ${clean})");
+            _ = script.AppendLine($"$source = New-Object -TypeName System.IO.DirectoryInfo '{sourceRootDirectory.FullName}'");
+            _ = script.AppendLine($"$destination = New-Object -TypeName System.IO.DirectoryInfo '{destinationRootDirectory.FullName}'");
+            _ = script.AppendLine($"$source.CopyContentTo($destination, ${copyEmpty}, ${overwrite}, ${clean})");
 
             // Act
             var results = PowerShellHelper.RunPowerShellScript(modulePath, script.ToString());
 
             // Assert
-            results.Errors.Should().BeNullOrEmpty();
-            destinationRootDirectory.Exists.Should().BeTrue();
-            destinationRootDirectory.GetDirectories().Any(d => d.Name == "ChildDir1").Should().Be(emptyDirExists);
-            destinationRootDirectory.GetFiles().Any(f => f.Name == "ChildFile3.txt").Should().Be(extraExists);
-            FileHelper.HaveSameHash(
+            _ = results.Errors.Should().BeNullOrEmpty();
+            _ = destinationRootDirectory.Exists.Should().BeTrue();
+            _ = destinationRootDirectory.GetDirectories().Any(d => d.Name == "ChildDir1").Should().Be(emptyDirExists);
+            _ = destinationRootDirectory.GetFiles().Any(f => f.Name == "ChildFile3.txt").Should().Be(extraExists);
+            _ = FileHelper.HaveSameHash(
                 sourceRootDirectory.GetFiles().First(f => f.Name == "ChildFile1.txt"),
                 destinationRootDirectory.GetFiles().First(f => f.Name == "ChildFile1.txt")
             ).Should().BeTrue();
@@ -205,16 +209,16 @@ namespace IOInfoExtensions.Tests.PowerShell
             // Arrange
             var nonExistentDirectory = new DirectoryInfo(Path.Combine(sourceRootDirectory.FullName, "NonExistent"));
             var script = new StringBuilder();
-            script.AppendLine($"$source = New-Object -TypeName System.IO.DirectoryInfo '{nonExistentDirectory.FullName}'");
-            script.AppendLine($"$destination = New-Object -TypeName System.IO.DirectoryInfo '{destinationRootDirectory.FullName}'");
-            script.AppendLine($"$source.CopyContentTo($destination)");
+            _ = script.AppendLine($"$source = New-Object -TypeName System.IO.DirectoryInfo '{nonExistentDirectory.FullName}'");
+            _ = script.AppendLine($"$destination = New-Object -TypeName System.IO.DirectoryInfo '{destinationRootDirectory.FullName}'");
+            _ = script.AppendLine($"$source.CopyContentTo($destination)");
 
             // Act
             var results = PowerShellHelper.RunPowerShellScript(modulePath, script.ToString());
 
             // Assert
-            nonExistentDirectory.Exists.Should().BeFalse();
-            results.Errors.Should().BeNullOrEmpty();
+            _ = nonExistentDirectory.Exists.Should().BeFalse();
+            _ = results.Errors.Should().BeNullOrEmpty();
         }
     }
 }

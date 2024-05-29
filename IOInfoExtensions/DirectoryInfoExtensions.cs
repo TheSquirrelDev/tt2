@@ -57,15 +57,14 @@ namespace IOInfoExtensions
             {
                 // See if a child at any nested level exists with the same leaf name. Then try to match the desired
                 // path. This allows for nested directories that don't exist.
-                matchingChild = directory
-                    .GetFileSystemInfos(Path.GetFileName(name), SearchOption.AllDirectories)
-                    .Where(x => x.FullName
+                matchingChild = Array.Find(directory.GetFileSystemInfos(Path.GetFileName(name), SearchOption.AllDirectories), x => 
+                    x.FullName
                         .Remove(0, directory.FullName.Length)
                         .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
-                        .Equals(name, StringComparison.InvariantCultureIgnoreCase))
-                    .FirstOrDefault();
+                        .Equals(name, StringComparison.InvariantCultureIgnoreCase));
             }
-#pragma warning disable IDE0046 // Convert to conditional expression - Leaving as is for readability and clarity
+
+            #pragma warning disable IDE0046 // Convert to conditional expression - Leaving as is for readability and clarity
             if (!ignoreCase && matchingChild != null && !matchingChild.Name.Equals(name, StringComparison.InvariantCulture))
             {
                 throw new DirectoryNotFoundException($"A child named '{name}' already exists but with a different case: {matchingChild.Name}.");
@@ -80,7 +79,7 @@ namespace IOInfoExtensions
             {
                 throw new DirectoryNotFoundException($"Cannot find child '{name}' because it does not exist and resolve was set to true.");
             }
-#pragma warning restore IDE0046 // Convert to conditional expression
+            #pragma warning restore IDE0046 // Convert to conditional expression
 
             return matchingChild != null
                 ? new DirectoryInfo(matchingChild.FullName)
@@ -117,18 +116,16 @@ namespace IOInfoExtensions
             {
                 // See if a child at any nested level exists with the same leaf name. Then try to match the desired
                 // path. This allows for wildcards and nested directories that don't exist
-                matchingChild = directory
-                    .GetFileSystemInfos(Path.GetFileName(name), SearchOption.AllDirectories)
-                    .Where(x => x.FullName
+                matchingChild = Array.Find(directory.GetFileSystemInfos(Path.GetFileName(name), SearchOption.AllDirectories), x =>
+                    x.FullName
                         .Remove(0, directory.FullName.Length)
                         .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
-                        .Equals(name, StringComparison.InvariantCultureIgnoreCase))
-                    .FirstOrDefault();
+                        .Equals(name, StringComparison.InvariantCultureIgnoreCase));
             }
 
             var relativePath = matchingChild?.FullName.Remove(0, directory.FullName.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
-#pragma warning disable IDE0046 // Convert to conditional expression - Leaving as is for readability and clarity
+            #pragma warning disable IDE0046 // Convert to conditional expression - Leaving as is for readability and clarity
             if (!ignoreCase && matchingChild != null && !relativePath.Equals(name, StringComparison.InvariantCulture))
             {
                 throw new FileNotFoundException($"A child named '{name}' already exists but with a different case: {relativePath}.");
@@ -143,7 +140,7 @@ namespace IOInfoExtensions
             {
                 throw new FileNotFoundException($"Cannot find child '{name}' because it does not exist and resolve was set to true.");
             }
-#pragma warning restore IDE0046 // Convert to conditional expression
+            #pragma warning restore IDE0046 // Convert to conditional expression
 
             return matchingChild != null
                 ? new FileInfo(matchingChild.FullName)
@@ -194,7 +191,7 @@ namespace IOInfoExtensions
                 var relativePath = file.FullName.Substring(source.FullName.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
                 var destFile = new FileInfo(Path.Combine(destination.FullName, relativePath));
                 destFile.Directory?.Create(); // If the directory already exists, this method does nothing.
-                file.CopyTo(destFile.FullName, overwrite);
+                _ = file.CopyTo(destFile.FullName, overwrite);
             }
 
             // If CopyEmptyDirectories was specified, loop on the source directories and create them at the target
@@ -203,7 +200,7 @@ namespace IOInfoExtensions
                 foreach (var dir in source.GetDirectories("*", SearchOption.AllDirectories))
                 {
                     var relativePath = dir.FullName.Substring(source.FullName.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-                    Directory.CreateDirectory(Path.Combine(destination.FullName, relativePath));
+                    _ = Directory.CreateDirectory(Path.Combine(destination.FullName, relativePath));
                 }
             }
 

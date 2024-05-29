@@ -30,10 +30,10 @@ namespace IOInfoExtensions.Tests
             destinationFile.MoveFrom(sourceFile, overwrite);
 
             // Assert
-            sourceFile.Exists.Should().BeFalse();
-            destinationFile.Exists.Should().BeTrue();
-            FileHelper.GetHash(destinationFile).Should().Be(sourceHash);
-            FileHelper.GetHash(destinationFile).Should().NotBe(destinationHash);
+            _ = sourceFile.Exists.Should().BeFalse();
+            _ = destinationFile.Exists.Should().BeTrue();
+            _ = FileHelper.GetHash(destinationFile).Should().Be(sourceHash);
+            _ = FileHelper.GetHash(destinationFile).Should().NotBe(destinationHash);
         }
 
         [Theory]
@@ -51,7 +51,7 @@ namespace IOInfoExtensions.Tests
             Action act = () => destinationFile.MoveFrom(sourceFile, false);
 
             // Assert
-            act.Should().Throw<IOException>().WithMessage(expectedMessage);
+            _ = act.Should().Throw<IOException>().WithMessage(expectedMessage);
         }
 
         [Theory]
@@ -76,11 +76,11 @@ namespace IOInfoExtensions.Tests
             destinationFile.CopyFrom(sourceFile, overwrite);
 
             // Assert
-            sourceFile.Exists.Should().BeTrue();
-            destinationFile.Exists.Should().BeTrue();
-            FileHelper.GetHash(destinationFile).Should().Be(sourceHash);
-            FileHelper.GetHash(destinationFile).Should().NotBe(destinationHash);
-            FileHelper.GetHash(sourceFile).Should().Be(sourceHash);
+            _ = sourceFile.Exists.Should().BeTrue();
+            _ = destinationFile.Exists.Should().BeTrue();
+            _ = FileHelper.GetHash(destinationFile).Should().Be(sourceHash);
+            _ = FileHelper.GetHash(destinationFile).Should().NotBe(destinationHash);
+            _ = FileHelper.GetHash(sourceFile).Should().Be(sourceHash);
         }
 
         [Theory]
@@ -98,7 +98,7 @@ namespace IOInfoExtensions.Tests
             Action act = () => destinationFile.CopyFrom(sourceFile, false);
 
             // Assert
-            act.Should().Throw<IOException>().WithMessage(expectedMessage);
+            _ = act.Should().Throw<IOException>().WithMessage(expectedMessage);
         }
 
         [Theory]
@@ -113,7 +113,7 @@ namespace IOInfoExtensions.Tests
             file.TryDelete();
 
             // Assert
-            file.Exists.Should().BeFalse();
+            _ = file.Exists.Should().BeFalse();
         }
     }
 }

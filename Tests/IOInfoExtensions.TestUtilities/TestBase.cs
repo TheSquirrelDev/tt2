@@ -31,8 +31,16 @@ namespace IOInfoExtensions.TestUtilities
 
         public void Dispose()
         {
-            testRootDirectory.Delete(true);
+            Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                testRootDirectory.Delete(true);
+            }
         }
     }
 }

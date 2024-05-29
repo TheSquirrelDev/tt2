@@ -36,13 +36,11 @@ namespace IOInfoExtensions.TestUtilities
 
                 foreach (var b in hash)
                 {
-                    sb.Append(b.ToString("X2"));
+                    _ = sb.Append(b.ToString("X2"));
                 }
 
                 return sb.ToString();
             }
         }
-
-
     }
 }

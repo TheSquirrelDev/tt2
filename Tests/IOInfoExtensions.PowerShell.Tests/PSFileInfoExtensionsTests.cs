@@ -22,9 +22,9 @@ namespace IOInfoExtensions.Tests.PowerShell
             var sourceHash = FileHelper.GetHash(sourceFile);
             var destinationHash = string.Empty;
             var script = new StringBuilder();
-            script.AppendLine($"$source = New-Object System.IO.FileInfo -ArgumentList '{sourceFile.FullName}'");
-            script.AppendLine($"$destination = New-Object System.IO.FileInfo -ArgumentList '{destinationFile.FullName}'");
-            script.AppendLine($"$destination.MoveFrom($source, ${overwrite})");
+            _ = script.AppendLine($"$source = New-Object System.IO.FileInfo -ArgumentList '{sourceFile.FullName}'");
+            _ = script.AppendLine($"$destination = New-Object System.IO.FileInfo -ArgumentList '{destinationFile.FullName}'");
+            _ = script.AppendLine($"$destination.MoveFrom($source, ${overwrite})");
 
             if (createDestination)
             {
@@ -38,11 +38,11 @@ namespace IOInfoExtensions.Tests.PowerShell
             destinationFile.Refresh();
 
             // Assert
-            results.Errors.Should().BeNullOrEmpty();
-            sourceFile.Exists.Should().BeFalse();
-            destinationFile.Exists.Should().BeTrue();
-            FileHelper.GetHash(destinationFile).Should().Be(sourceHash);
-            FileHelper.GetHash(destinationFile).Should().NotBe(destinationHash);
+            _ = results.Errors.Should().BeNullOrEmpty();
+            _ = sourceFile.Exists.Should().BeFalse();
+            _ = destinationFile.Exists.Should().BeTrue();
+            _ = FileHelper.GetHash(destinationFile).Should().Be(sourceHash);
+            _ = FileHelper.GetHash(destinationFile).Should().NotBe(destinationHash);
         }
 
         [Theory]
@@ -55,17 +55,17 @@ namespace IOInfoExtensions.Tests.PowerShell
             var destinationFile = new FileInfo(Path.Combine(destinationRootDirectory.FullName, destinationFileName));
             var expectedMessage = string.Format(message, sourceError ? sourceFile.FullName : destinationFile.FullName);
             var script = new StringBuilder();
-            script.AppendLine($"$source = New-Object System.IO.FileInfo -ArgumentList '{sourceFile.FullName}'");
-            script.AppendLine($"$destination = New-Object System.IO.FileInfo -ArgumentList '{destinationFile.FullName}'");
-            script.AppendLine($"$destination.MoveFrom($source, $false)");
+            _ = script.AppendLine($"$source = New-Object System.IO.FileInfo -ArgumentList '{sourceFile.FullName}'");
+            _ = script.AppendLine($"$destination = New-Object System.IO.FileInfo -ArgumentList '{destinationFile.FullName}'");
+            _ = script.AppendLine($"$destination.MoveFrom($source, $false)");
             FileHelper.WriteFiles(destinationFile.Directory, new string[] { destinationFile.Name });
 
             // Act
             var results = PowerShellHelper.RunPowerShellScript(modulePath, script.ToString());
 
             // Assert
-            results.Errors.Should().NotBeNullOrEmpty();
-            results.Errors.First().Exception.Message.Should().Be(expectedMessage);
+            _ = results.Errors.Should().NotBeNullOrEmpty();
+            _ = results.Errors.First().Exception.Message.Should().Be(expectedMessage);
         }
 
         [Theory]
@@ -80,9 +80,9 @@ namespace IOInfoExtensions.Tests.PowerShell
             var sourceHash = FileHelper.GetHash(sourceFile);
             var destinationHash = string.Empty;
             var script = new StringBuilder();
-            script.AppendLine($"$source = New-Object System.IO.FileInfo -ArgumentList '{sourceFile.FullName}'");
-            script.AppendLine($"$destination = New-Object System.IO.FileInfo -ArgumentList '{destinationFile.FullName}'");
-            script.AppendLine($"$destination.CopyFrom($source, ${overwrite})");
+            _ = script.AppendLine($"$source = New-Object System.IO.FileInfo -ArgumentList '{sourceFile.FullName}'");
+            _ = script.AppendLine($"$destination = New-Object System.IO.FileInfo -ArgumentList '{destinationFile.FullName}'");
+            _ = script.AppendLine($"$destination.CopyFrom($source, ${overwrite})");
 
             if (createDestination)
             {
@@ -96,12 +96,12 @@ namespace IOInfoExtensions.Tests.PowerShell
             destinationFile.Refresh();
 
             // Assert
-            results.Errors.Should().BeNullOrEmpty();
-            sourceFile.Exists.Should().BeTrue();
-            destinationFile.Exists.Should().BeTrue();
-            FileHelper.GetHash(destinationFile).Should().Be(sourceHash);
-            FileHelper.GetHash(destinationFile).Should().NotBe(destinationHash);
-            FileHelper.GetHash(sourceFile).Should().Be(sourceHash);
+            _ = results.Errors.Should().BeNullOrEmpty();
+            _ = sourceFile.Exists.Should().BeTrue();
+            _ = destinationFile.Exists.Should().BeTrue();
+            _ = FileHelper.GetHash(destinationFile).Should().Be(sourceHash);
+            _ = FileHelper.GetHash(destinationFile).Should().NotBe(destinationHash);
+            _ = FileHelper.GetHash(sourceFile).Should().Be(sourceHash);
         }
 
         [Theory]
@@ -114,17 +114,17 @@ namespace IOInfoExtensions.Tests.PowerShell
             var destinationFile = new FileInfo(Path.Combine(destinationRootDirectory.FullName, destinationFileName));
             var expectedMessage = string.Format(message, sourceError ? sourceFile.FullName : destinationFile.FullName);
             var script = new StringBuilder();
-            script.AppendLine($"$source = New-Object System.IO.FileInfo -ArgumentList '{sourceFile.FullName}'");
-            script.AppendLine($"$destination = New-Object System.IO.FileInfo -ArgumentList '{destinationFile.FullName}'");
-            script.AppendLine($"$destination.CopyFrom($source, $false)");
+            _ = script.AppendLine($"$source = New-Object System.IO.FileInfo -ArgumentList '{sourceFile.FullName}'");
+            _ = script.AppendLine($"$destination = New-Object System.IO.FileInfo -ArgumentList '{destinationFile.FullName}'");
+            _ = script.AppendLine($"$destination.CopyFrom($source, $false)");
             FileHelper.WriteFiles(destinationFile.Directory, new string[] { destinationFile.Name });
 
             // Act
             var results = PowerShellHelper.RunPowerShellScript(modulePath, script.ToString());
 
             // Assert
-            results.Errors.Should().NotBeNullOrEmpty();
-            results.Errors.First().Exception.Message.Should().Be(expectedMessage);
+            _ = results.Errors.Should().NotBeNullOrEmpty();
+            _ = results.Errors.First().Exception.Message.Should().Be(expectedMessage);
         }
 
         [Theory]
@@ -135,16 +135,16 @@ namespace IOInfoExtensions.Tests.PowerShell
             // Arrange
             var file = new FileInfo(Path.Combine(sourceRootDirectory.FullName, fileName));
             var script = new StringBuilder();
-            script.AppendLine($"$file = New-Object System.IO.FileInfo -ArgumentList '{file.FullName}'");
-            script.AppendLine($"$file.TryDelete()");
+            _ = script.AppendLine($"$file = New-Object System.IO.FileInfo -ArgumentList '{file.FullName}'");
+            _ = script.AppendLine($"$file.TryDelete()");
 
             // Act
             var results = PowerShellHelper.RunPowerShellScript(modulePath, script.ToString());
             file.Refresh();
 
             // Assert
-            results.Errors.Should().BeNullOrEmpty();
-            file.Exists.Should().BeFalse();
+            _ = results.Errors.Should().BeNullOrEmpty();
+            _ = file.Exists.Should().BeFalse();
         }
     }
 }

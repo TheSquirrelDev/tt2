@@ -26,8 +26,8 @@ namespace IOInfoExtensions.Tests
             var childDir = sourceRootDirectory.GetDirectory(childDirName, resolve, ignoreCase);
 
             // Assert
-            childDir.FullName.Should().Be(expectedPath);
-            childDir.Exists.Should().Be(exists);
+            _ = childDir.FullName.Should().Be(expectedPath);
+            _ = childDir.Exists.Should().Be(exists);
         }
 
         [Theory]
@@ -44,7 +44,7 @@ namespace IOInfoExtensions.Tests
             Action act = () => sourceRootDirectory.GetDirectory(childDirName, resolve, ignoreCase);
 
             // Assert
-            act.Should().Throw<Exception>().WithMessage(expectedMessage);
+            _ = act.Should().Throw<Exception>().WithMessage(expectedMessage);
         }
 
         [Theory]
@@ -63,8 +63,8 @@ namespace IOInfoExtensions.Tests
             var childFile = sourceRootDirectory.GetFile(childFileName, resolve, ignoreCase);
 
             // Assert
-            childFile.FullName.Should().Be(expectedPath);
-            childFile.Exists.Should().Be(exists);
+            _ = childFile.FullName.Should().Be(expectedPath);
+            _ = childFile.Exists.Should().Be(exists);
         }
 
         [Theory]
@@ -81,7 +81,7 @@ namespace IOInfoExtensions.Tests
             Action act = () => sourceRootDirectory.GetFile(childFileName, resolve, ignoreCase);
 
             // Assert
-            act.Should().Throw<Exception>().WithMessage(expectedMessage);
+            _ = act.Should().Throw<Exception>().WithMessage(expectedMessage);
         }
 
         [Fact]
@@ -93,9 +93,9 @@ namespace IOInfoExtensions.Tests
             sourceRootDirectory.DeleteContent();
 
             // Assert
-            sourceRootDirectory.Exists.Should().BeTrue();
-            sourceRootDirectory.GetDirectories().Should().BeEmpty();
-            sourceRootDirectory.GetFiles().Should().BeEmpty();
+            _ = sourceRootDirectory.Exists.Should().BeTrue();
+            _ = sourceRootDirectory.GetDirectories().Should().BeEmpty();
+            _ = sourceRootDirectory.GetFiles().Should().BeEmpty();
         }
 
         [Fact]
@@ -108,7 +108,7 @@ namespace IOInfoExtensions.Tests
             nonExistentDirectory.DeleteContent();
 
             // Assert
-            nonExistentDirectory.Exists.Should().BeFalse();
+            _ = nonExistentDirectory.Exists.Should().BeFalse();
         }
 
         [Theory]
@@ -129,10 +129,10 @@ namespace IOInfoExtensions.Tests
             sourceRootDirectory.CopyContentTo(destinationRootDirectory, copyEmpty, overwrite, clean);
 
             // Assert
-            destinationRootDirectory.Exists.Should().BeTrue();
-            destinationRootDirectory.GetDirectories().Any(d => d.Name == "ChildDir1").Should().Be(emptyDirExists);
-            destinationRootDirectory.GetFiles().Any(f => f.Name == "ChildFile3.txt").Should().Be(extraExists);
-            FileHelper.HaveSameHash(
+            _ = destinationRootDirectory.Exists.Should().BeTrue();
+            _ = destinationRootDirectory.GetDirectories().Any(d => d.Name == "ChildDir1").Should().Be(emptyDirExists);
+            _ = destinationRootDirectory.GetFiles().Any(f => f.Name == "ChildFile3.txt").Should().Be(extraExists);
+            _ = FileHelper.HaveSameHash(
                 sourceRootDirectory.GetFiles().First(f => f.Name == "ChildFile1.txt"),
                 destinationRootDirectory.GetFiles().First(f => f.Name == "ChildFile1.txt")
             ).Should().BeTrue();
@@ -148,7 +148,7 @@ namespace IOInfoExtensions.Tests
             nonExistentDirectory.CopyContentTo(destinationRootDirectory);
 
             // Assert
-            nonExistentDirectory.Exists.Should().BeFalse();
+            _ = nonExistentDirectory.Exists.Should().BeFalse();
         }
     }
 }
