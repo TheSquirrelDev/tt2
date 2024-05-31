@@ -4,7 +4,7 @@ using System.Management.Automation;
 namespace IOInfoExtensions.PowerShell
 {
     /// <summary>
-    ///     Static methods that wrap the IOInfoExtensions methods for use in PowerShell. 
+    ///     Static methods that wrap the IOInfoExtensions methods for use in PowerShell.
     /// </summary>
     public static class ExtensionsWrapper
     {
@@ -22,7 +22,7 @@ namespace IOInfoExtensions.PowerShell
         /// <summary>
         ///    PowerShell wrapper for the GetFile method.
         /// </summary>
-        /// <inhertidoc cref="DirectoryInfoExtensions.GetFile(DirectoryInfo, string, bool, bool)"/>
+        /// <inheritdoc cref="DirectoryInfoExtensions.GetFile(DirectoryInfo, string, bool, bool)"/>
         /// <exception cref="PSInvalidOperationException"></exception>
         public static FileInfo PSGetFile(PSObject directory, string name, bool resolve = false, bool ignoreCase = true) =>
             directory.BaseObject is DirectoryInfo directoryInfo

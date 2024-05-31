@@ -11,7 +11,11 @@ param
 
     [Parameter(Mandatory = $true)]
     [string]
-    $ModuleRootDirectory
+    $ModuleRootDirectory,
+
+    [Parameter()]
+    [string]
+    $ModuleName = 'IOInfoExtensions.PowerShell'
 )
 
 Write-Verbose "Initial BinaryOutputDirectory: $BinaryOutputDirectory"
@@ -20,7 +24,7 @@ Write-Verbose "Initial ModuleRootDirectory: $ModuleRootDirectory"
 
 $BinaryOutputDirectory = Resolve-Path -Path $BinaryOutputDirectory
 $ProjectDirectory = Resolve-Path -Path $ProjectDirectory
-$moduleDirectory = Join-Path -Path $ModuleRootDirectory -ChildPath 'IOInfoExtensions.PowerShell'
+$moduleDirectory = Join-Path -Path $ModuleRootDirectory -ChildPath $ModuleName
 if (-not (Test-Path -Path $moduleDirectory))
 {
     $null = New-Item -Path $moduleDirectory -ItemType Directory
@@ -46,7 +50,7 @@ while ($null -eq $solutionDirectory)
     }
 }
 
-$moduleSource = Join-Path -Path $solutionDirectory -ChildPath 'IOInfoExtensions.PowerShell\Module' -Resolve
+$moduleSource = Join-Path -Path $solutionDirectory -ChildPath "$ModuleName\Module" -Resolve
 if ($moduleSource -eq $moduleDirectory)
 {
     throw "ModuleDirectory cannot be the same as the module source directory"
@@ -62,7 +66,7 @@ $BinaryOutputDirectory |
     Get-ChildItem -Filter 'IOInfoExtensions.*dll*' |
     Copy-Item -Destination $moduleDirectory
 
-$dll = Get-ChildItem -Path $moduleDirectory -Filter 'IOInfoExtensions.PowerShell.dll'
+$dll = Get-ChildItem -Path $moduleDirectory -Filter "$ModuleName.dll" -Recurse
 $productVersion = $dll.VersionInfo.ProductVersion.Split('+')[0]
 
 Write-Verbose "Setting ModuleVersion to $productVersion"

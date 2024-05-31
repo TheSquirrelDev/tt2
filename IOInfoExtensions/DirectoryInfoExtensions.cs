@@ -57,7 +57,7 @@ namespace IOInfoExtensions
             {
                 // See if a child at any nested level exists with the same leaf name. Then try to match the desired
                 // path. This allows for nested directories that don't exist.
-                matchingChild = Array.Find(directory.GetFileSystemInfos(Path.GetFileName(name), SearchOption.AllDirectories), x => 
+                matchingChild = Array.Find(directory.GetFileSystemInfos(Path.GetFileName(name), SearchOption.AllDirectories), x =>
                     x.FullName
                         .Remove(0, directory.FullName.Length)
                         .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
@@ -65,12 +65,12 @@ namespace IOInfoExtensions
             }
 
             #pragma warning disable IDE0046 // Convert to conditional expression - Leaving as is for readability and clarity
-            if (!ignoreCase && matchingChild != null && !matchingChild.Name.Equals(name, StringComparison.InvariantCulture))
+            if (!ignoreCase && matchingChild?.Name.Equals(name, StringComparison.InvariantCulture) == false)
             {
                 throw new DirectoryNotFoundException($"A child named '{name}' already exists but with a different case: {matchingChild.Name}.");
             }
 
-            if (matchingChild != null && !matchingChild.Attributes.HasFlag(FileAttributes.Directory))
+            if (matchingChild?.Attributes.HasFlag(FileAttributes.Directory) == false)
             {
                 throw new DirectoryNotFoundException($"A child named '{name}' already exists but is not a Directory.");
             }
@@ -131,7 +131,7 @@ namespace IOInfoExtensions
                 throw new FileNotFoundException($"A child named '{name}' already exists but with a different case: {relativePath}.");
             }
 
-            if (matchingChild != null && matchingChild.Attributes.HasFlag(FileAttributes.Directory))
+            if (matchingChild?.Attributes.HasFlag(FileAttributes.Directory) == true)
             {
                 throw new FileNotFoundException($"A child named '{name}' already exists but is not a File.");
             }

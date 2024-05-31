@@ -31,17 +31,16 @@ namespace IOInfoExtensions
         ///         $sourceFile, $newFile |
         ///             Select-Object Directory, Name, @{n='DirectoryExists';e={$_.Directory.Exists}}, Exists
         ///
-        ///         
         ///         Directory         Name           DirectoryExists Exists
         ///         ---------         ----           --------------- ------
         ///         C:\Demo           ChildFile1.txt            True   True
         ///         C:\Demo\ChildDir3 ChildFile3.txt           False  False
         ///
-        ///         
+        ///
         ///         $newFile.MoveFrom($sourceFile)
         ///         $sourceFile, $newFile |
         ///             Select-Object Directory, Name, @{n='DirectoryExists';e={$_.Directory.Exists}}, Exists
-        ///         
+        ///
         ///         Directory         Name           DirectoryExists Exists
         ///         ---------         ----           --------------- ------
         ///         C:\Demo           ChildFile1.txt            True  False
