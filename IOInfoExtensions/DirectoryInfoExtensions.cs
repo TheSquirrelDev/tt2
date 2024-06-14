@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -10,12 +11,16 @@ namespace IOInfoExtensions
     public static class DirectoryInfoExtensions
     {
         /// <summary>
-        ///     Returns a DirectoryInfo object for the child directory with the specified name.
+        ///     Returns a DirectoryInfo object for a child directory with the specified name.
         /// </summary>
         /// <remarks>
         ///     Creates a new DirectoryInfo object representing a child directory of the calling DirectoryInfo object that
-        ///     has the specified name. The newly created DirectoryInfo object will be checked against the remaining parameters
-        ///     as specified then returned. Specifying nested directories in the name is supported.
+        ///     has the specified name.
+        ///
+        ///     The newly created DirectoryInfo object will be checked against the remaining parameters
+        ///     as specified then returned.
+        ///
+        ///     Specifying nested directories in the name is supported.
         /// </remarks>
         /// <param name="directory">The calling DirectoryInfo object that will be the parent of the returned DirectoryInfo object.</param>
         /// <param name="name">The name of the child directory to return.</param>
@@ -23,21 +28,112 @@ namespace IOInfoExtensions
         /// <param name="ignoreCase">If set to false, it will throw an error if a matching child directory is found but with a different case.</param>
         /// <returns>System.IO.DirectoryInfo</returns>
         /// <example>
-        ///     This returns a DirectoryInfo object for the child directory named "ChildDirectory" in the given directory.
+        ///     <title>Get an existing child directory by specifying only the directory name using the correct casing.</title>
+        ///     <remarks>
+        ///         This returns a DirectoryInfo object for the child directory named "ChildDir1" in the given directory.
+        ///         It uses default values for the [resolve] and [ignoreCase] parameters.
+        ///     </remarks>
         ///     <code language="csharp">
-        ///         var rootDirectory = new DirectoryInfo("C:\\");
-        ///         var childDirectory = rootDirectory.GetDirectory("ChildDirectory");
-        ///         Console.WriteLine(childDirectory.FullName); // Output: C:\ChildDirectory
+        ///         var demoRoot = new DirectoryInfo("C:\\Demo");
+        ///
+        ///         Console.WriteLine("First level children:");
+        ///         demoRoot.GetFileSystemInfos().ToList().ForEach(x => Console.WriteLine($"\t{x.FullName}"));
+        ///
+        ///         var c = demoRoot.GetDirectory("ChildDir1");
+        ///         Console.WriteLine($"Child FullName:\n\t{c.FullName}");
+        ///         Console.WriteLine($"Child Type:\n\t{c.GetType()}");
+        ///         Console.WriteLine($"Child Exists:\n\t{c.Exists}");
+        ///
+        ///         /*
+        ///          * Output:
+        ///          * First level children:
+        ///          *         C:\Demo\ChildDir1
+        ///          *         C:\Demo\ChildDir2
+        ///          *         C:\Demo\ChildFile1.txt
+        ///          *         C:\Demo\ChildFile2.txt
+        ///          * Child FullName:
+        ///          *         C:\Demo\ChildDir1
+        ///          * Child Type:
+        ///          *         System.IO.DirectoryInfo
+        ///          * Child Exists:
+        ///          *         True
+        ///          */
         ///     </code>
         ///     <code language="powershell">
-        ///         $rootDirectory = New-Object -TypeName System.IO.DirectoryInfo -ArgumentList "C:\"
-        ///         $childDirectory = $rootDirectory.GetDirectory("ChildDirectory")
-        ///         $childDirectory.FullName # Output: C:\ChildDirectory
+        ///         PS> $directory = New-Object System.IO.DirectoryInfo 'C:\Demo'
+        ///         PS> $directory.GetFileSystemInfos().FullName
+        ///             C:\Demo\ChildDir1
+        ///             C:\Demo\ChildDir2
+        ///             C:\Demo\ChildFile1.txt
+        ///             C:\Demo\ChildFile2.txt
+        ///
+        ///         PS> $child = $directory.GetDirectory('ChildDir1')
+        ///         PS> $child.FullName
+        ///             C:\Demo\ChildDir1
+        ///
+        ///         PS> $child.GetType().FullName
+        ///             System.IO.DirectoryInfo
+        ///
+        ///         PS> $child.Exists
+        ///             True
+        ///     </code>
+        /// </example>
+        /// <example>
+        ///     <title>Get a non-existing child directory by specifying only the directory name.</title>
+        ///     <remarks>
+        ///         This returns a DirectoryInfo object for the child directory named "ChildDir3\InnerChildDir3" in the given directory.
+        ///         It uses default values for the [resolve] and [ignoreCase] parameters.
+        ///     </remarks>
+        ///     <code language="csharp">
+        ///         var demoRoot = new DirectoryInfo("C:\\Demo");
+        ///
+        ///         Console.WriteLine("Children:");
+        ///         demoRoot.GetFileSystemInfos("*", SearchOption.AllDirectories).ToList().ForEach(x => Console.WriteLine($"\t{x.FullName}"));
+        ///
+        ///         var c = demoRoot.GetDirectory("ChildDir3\\InnerChildDir3");
+        ///         Console.WriteLine($"Child FullName:\n\t{c.FullName}");
+        ///         Console.WriteLine($"Child Type:\n\t{c.GetType()}");
+        ///         Console.WriteLine($"Child Exists:\n\t{c.Exists}");
+        ///
+        ///         /*
+        ///          * Output:
+        ///          * Children:
+        ///          *         C:\Demo\ChildDir1
+        ///          *         C:\Demo\ChildDir2
+        ///          *         C:\Demo\ChildFile1.txt
+        ///          *         C:\Demo\ChildFile2.txt
+        ///          *         C:\Demo\ChildDir2\ChildFile1.txt
+        ///          *         C:\Demo\ChildDir2\ChildFile2.txt
+        ///          * Child FullName:
+        ///          *         C:\Demo\ChildDir3\InnerChildDir3
+        ///          * Child Type:
+        ///          *         System.IO.DirectoryInfo
+        ///          * Child Exists:
+        ///          *         False
+        ///          */
+        ///     </code>
+        ///     <code language="powershell">
+        ///         PS> $directory = New-Object System.IO.DirectoryInfo 'C:\Demo'
+        ///         PS> $directory.GetFileSystemInfos().FullName
+        ///                     C:\Demo\ChildDir1
+        ///                     C:\Demo\ChildDir2
+        ///                     C:\Demo\ChildFile1.txt
+        ///                     C:\Demo\ChildFile2.txt
+        ///
+        ///         PS> $child = $directory.GetDirectory('ChildDir3\InnerChildDir3')
+        ///         PS> $child.FullName
+        ///             C:\Demo\ChildDir3\InnerChildDir3
+        ///
+        ///         PS> $child.GetType().FullName
+        ///             System.IO.DirectoryInfo
+        ///
+        ///         PS> $child.Exists
+        ///             False
         ///     </code>
         /// </example>
         /// <exception cref="ArgumentException">If the given name is null, empty, or just whitespace.</exception>
         /// <exception cref="Exception">If the given name matched multiple child items. This will happen if a wildcard was passed as part of the name.</exception>
-        /// <exception cref="DirectoryNotFoundException">If the given name resolves to a child File, if Resolve=true and the child directory does not exist, or if MatchCase=true and the casing doesn't match.</exception>
+        /// <exception cref="DirectoryNotFoundException">If the given name resolves to a child file, resolve = true and the child directory does not exist, or if ignoreCase = false and the casing doesn't match.</exception>
         public static DirectoryInfo GetDirectory(this DirectoryInfo directory, string name, bool resolve = false, bool ignoreCase = false)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -96,7 +192,7 @@ namespace IOInfoExtensions
         /// <returns>System.IO.FileInfo</returns>
         /// <exception cref="ArgumentException">If the given name is null, empty, or just whitespace.</exception>
         /// <exception cref="Exception">If the given name matched multiple child items. This will happen if a wildcard was passed as part of the name.</exception>
-        /// <exception cref="DirectoryNotFoundException">If the given name resolved to a child Directory, if Resolve=true and the child file does not exist, or if MatchCase=true and the casing doesn't match.</exception>
+        /// <exception cref="FileNotFoundException">If the given name resolves to a child directory, resolve = true and the child file does not exist, or if ignoreCase = false and the casing doesn't match.</exception>
         public static FileInfo GetFile(this DirectoryInfo directory, string name, bool resolve = false, bool ignoreCase = false)
         {
             if (string.IsNullOrWhiteSpace(name))

@@ -8,15 +8,12 @@ namespace IOInfoExtensions
     public static class FileInfoExtensions
     {
         /// <summary>
-        ///     <para>
-        ///         Moves the source file to the destination file. If the destination file exists and overwrite is false,
-        ///         an exception will be thrown.
-        ///     </para>
-        ///     <para>
-        ///         System.IO.FileInfo has a MoveTo method, but it changes the Source object information
-        ///         to match the destination properties.This method will allow you to call the move from the
-        ///         destination, leaving the source unchanged
-        ///     </para>
+        ///     Moves the source file to the destination file. If the destination file exists and overwrite is false,
+        ///     an exception will be thrown.
+        ///
+        ///     System.IO.FileInfo has a MoveTo method, but it changes the Source object information
+        ///     to match the destination properties.This method will allow you to call the move from the
+        ///     destination, leaving the source unchanged.
         /// </summary>
         /// <param name="destination">The calling FileInfo object.</param>
         /// <param name="source">The source FileInfo object to be moved.</param>
@@ -26,7 +23,7 @@ namespace IOInfoExtensions
         /// <example>
         ///     The directory structure is created and the file is moved from the source file without changing the properties of the source file object.
         ///     <code language="powershell">
-        ///         PS&gt; $sourceFile = New-Object System.IO.FileInfo 'C:\Demo\ChildFile1.txt'
+        ///         PS> $sourceFile = New-Object System.IO.FileInfo 'C:\Demo\ChildFile1.txt'
         ///         PS> $newFile = New-Object System.IO.FileInfo 'C:\Demo\ChildDir3\ChildFile3.txt'
         ///         $sourceFile, $newFile |
         ///             Select-Object Directory, Name, @{n='DirectoryExists';e={$_.Directory.Exists}}, Exists
