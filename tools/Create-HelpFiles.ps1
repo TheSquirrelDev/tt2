@@ -5,7 +5,7 @@ param
     [System.IO.DirectoryInfo]$ModuleDirectory = 'C:\Projects\tt2\Output\IOInfoExtensions.PowerShell',
 
     [Parameter()]
-    [System.IO.DirectoryInfo]$BinaryOutputDirectory = 'C:\Projects\tt2\IOInfoExtensions.PowerShell\bin\Debug\netstandard2.0',
+    [System.IO.DirectoryInfo]$BinaryOutputDirectory = 'C:\Projects\tt2\src\IOInfoExtensions.PowerShell\bin\Debug\netstandard2.0',
 
     [Parameter()]
     [string]
@@ -16,11 +16,58 @@ param
     $KeywordTemplate = @('IOInfoExtensions', 'IOInfoExtensions.PowerShell'),
 
     [Parameter()]
+    [ValidateSet('Ignore', 'Warn', 'Error')]
+    [string]
+    $MissingPropertyAction = 'Warn',
+
+    [Parameter()]
     [int]
     $MaxLineWidth = 100
 )
 
 #region functions
+function Write-MissingPropertyMessage
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [string]
+        $PropertyName,
+
+        [Parameter(Mandatory = $true)]
+        [string]
+        $MemberName,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateSet('Ignore', 'Warn', 'Error')]
+        [string]
+        $MissingPropertyAction,
+
+        [Parameter()]
+        [int]
+        $ExampleIndex = -1
+    )
+
+    $message = 'MISSING PROPERTY: {0} is missing the documentation property {1}.' -f $MemberName, $PropertyName
+    if ($ExampleIndex -ge 0)
+    {
+        $message = '{0} on Example {1}.' -f $message.TrimEnd('.'), $ExampleIndex
+    }
+
+    switch ($MissingPropertyAction)
+    {
+        'Warn'
+        {
+            Write-Warning $message
+        }
+        'Error'
+        {
+            throw $message
+        }
+    }
+}
+
 function Import-AssemblyData
 {
     [CmdletBinding()]
@@ -141,7 +188,7 @@ function Import-TypeData
                 $typeNode = $types.SelectSingleNode("//Type[Name[text()='$typeName']]")
                 if ($null -eq $typeNode)
                 {
-                    Write-Verbose "Creating type $typeName"
+                    Write-Verbose "New type <$typeName> detected to add to documentation."
                     $typeNode = $types.CreateElement('Type')
                     $null = $typeNode.AppendChild($types.CreateElement('Name'))
                     $null = $typeNode.AppendChild($types.CreateElement('Members'))
@@ -153,14 +200,14 @@ function Import-TypeData
                 $memberNode = $typeNode.SelectSingleNode("./Members/*[Name[text()='$($member.Name)']]")
                 if ($null -eq $memberNode)
                 {
-                    Write-Verbose "Creating member $($member.Name) for type $typeName"
+                    Write-Verbose "New member [$($member.Name)] for type <$typeName> detected to add to documentation."
                     $memberNode = $typeNode.SelectSingleNode('Members').AppendChild($types.ImportNode($member, $true))
                 }
 
                 if ($memberNode.OuterXml -ne $member.OuterXml)
                 {
                     $mismatch = @{MainXml = $memberNode.OuterXml; ExtendedXml = $member.OuterXml}
-                    Write-Warning "Unable to merge member $($member.Name) from type $($typeName) into the main types xml. $($mismatch | ConvertTo-Json)"
+                    Write-Warning "Unable to merge member [$($member.Name)] from type <$($typeName)> into the main types xml. $($mismatch | ConvertTo-Json)"
                 }
             }
         }
@@ -280,6 +327,10 @@ function Format-Text
         {
             $Text = $Text -replace '\s{2,}', ' '
         }
+        else
+        {
+            $Text = $Text -replace "^`t", '~TAB~ ' -replace "`t", ' ~TAB~ '
+        }
 
         $words = $Text -split '\s'
         $indent = "`t" * $TabCount
@@ -299,8 +350,68 @@ function Format-Text
             }
         }
 
-        return $lines -join [System.Environment]::NewLine
+        return $lines -join [System.Environment]::NewLine -replace '\s*~TAB~\s*', "`t"
     }
+}
+
+function ConvertTo-PsHelpText
+{
+    param
+    (
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [PSObject]
+        $Element
+    )
+
+    if ($Element -is [string])
+    {
+        return $Element -replace '\s{2,}', ' '
+    }
+
+    $text = ''
+    foreach ($child in $Element.ChildNodes)
+    {
+        switch ($child.NodeType)
+        {
+            'Text'
+            {
+                $text += $child.Value | ConvertTo-PsHelpText
+            }
+            'Element'
+            {
+                switch ($child.Name)
+                {
+                    'c'
+                    {
+                        $open = '<'
+                        $close = '>'
+                    }
+                    'para'
+                    {
+                        $open = $newLine
+                        $close = $newLine
+                    }
+                    'i'
+                    {
+                        $open = $close = '"'
+                    }
+                    default
+                    {
+                        Write-Warning "Unknown element $($child.Name) found in XML documentation."
+                        $open = $close = ''
+                    }
+                }
+
+                $text += '{0}{1}{2}' -f $open, (ConvertTo-PsHelpText -Element $child), $close
+            }
+            default
+            {
+                Write-Warning "Unknown node type $($child.NodeType) found in XML documentation."
+            }
+        }
+    }
+
+    return $text.Trim(' ').TrimStart($newLine)
 }
 #endregion
 
@@ -364,6 +475,8 @@ $exampleTemplate = [ordered]@{
 $members = $typeData.SelectNodes('//Members/*')
 foreach ($member in $members)
 {
+
+    Write-Verbose "Processing [$($member.CodeReference.MethodName)] from type <$($member.CodeReference.TypeName)>."
     #region Validate we have all the necessary data
     $methodDefinition = $methods | Where-Object { $_.Name -eq $member.Name }
     if ($null -eq $methodDefinition)
@@ -401,33 +514,33 @@ foreach ($member in $members)
     #region Short Description
     if ($null -ne $memberDoc.summary)
     {
-        $content['Short Description'] = $memberDoc.summary.Trim() -replace '\s{2,}', ' '
+        $content['Short Description'] = $memberDoc.summary | ConvertTo-PsHelpText
     }
     else
     {
-        Write-Warning "No summary found for $($member.Name)."
+        Write-MissingPropertyMessage -PropertyName 'Summary' -MemberName $member.Name -MissingPropertyAction $MissingPropertyAction
     }
     #endregion
 
     #region Long Description
     if ($null -ne $memberDoc.remarks)
     {
-        $content['Long Description'] = $memberDoc.remarks.Trim() -replace '\s{2,}', ' '
+        $content['Long Description'] = ($memberDoc.remarks | ConvertTo-PsHelpText) -replace '^\n*', ''
     }
     else
     {
-        Write-Warning "No remarks found for $($member.Name)."
+        Write-MissingPropertyMessage -PropertyName 'Remarks' -MemberName $member.Name -MissingPropertyAction $MissingPropertyAction
     }
     #endregion
 
     #region Outputs
     if ($null -ne $memberDoc.returns)
     {
-        $content['Outputs'] = $memberDoc.returns.Trim() -replace '\s{2,}', ' '
+        $content['Outputs'] = $memberDoc.returns | ConvertTo-PsHelpText
     }
     else
     {
-        Write-Warning "No returns found for $($member.Name)."
+        Write-MissingPropertyMessage -PropertyName 'Returns' -MemberName $member.Name -MissingPropertyAction $MissingPropertyAction
     }
     #endregion
 
@@ -511,33 +624,39 @@ foreach ($member in $members)
         $example = $exampleTemplate | Copy-Template
 
         $example['Index'] = $i + 1
-        if ([string]::IsNullOrWhiteSpace($examples[$i].title))
+        if ([string]::IsNullOrWhiteSpace($examples[$i].summary))
         {
-            Write-Warning "No title found for example $i on $($member.Name)."
+            Write-MissingPropertyMessage -PropertyName 'Summary' -MemberName $member.Name -MissingPropertyAction $MissingPropertyAction -ExampleIndex $i
         }
         else
         {
-            $example['Title'] = $examples[$i].title
+            $example['Title'] = $examples[$i].summary | ConvertTo-PsHelpText
         }
 
         $code = ($examples[$i].code | Where-Object { $_.language -eq 'powershell' }).FirstChild.Value.Trim($newLine)
+        if ([string]::IsNullOrWhiteSpace($code))
+        {
+            Write-MissingPropertyMessage -PropertyName 'Code' -MemberName $member.Name -MissingPropertyAction $MissingPropertyAction -ExampleIndex $i
+        }
+
         $extraWhitespaceCount = $code.IndexOf('PS>')
         if ($extraWhitespaceCount -lt 0)
         {
-            Write-Warning "PowerShell code example found for $($member.Name) but in the incorrect format."
+            Write-MissingPropertyMessage -PropertyName 'Code (improperly formatted)' -MemberName $member.Name -MissingPropertyAction $MissingPropertyAction -ExampleIndex $i
         }
 
         $example['Code'] = $code -replace $newLine, '~~~' -replace "\s{$extraWhitespaceCount}", '' -replace '~~~', $newLine
 
         if ([string]::IsNullOrWhiteSpace($examples[$i].remarks))
         {
-            Write-Warning "No remarks found for example $i on $($member.Name)."
+            Write-MissingPropertyMessage -PropertyName 'Remarks' -MemberName $member.Name -MissingPropertyAction $MissingPropertyAction -ExampleIndex $i
         }
         else
         {
-            $remarks = $examples[$i].remarks.Trim($newLine)
-            $extraWhitespaceCount = $remarks.Length - $remarks.TrimStart().Length
-            $example['Remarks'] = $remarks -replace $newLine, '~~~' -replace "\s{$extraWhitespaceCount}", '' -replace '~~~', $newLine
+            # $remarks = $examples[$i].remarks.Trim($newLine)
+            # $extraWhitespaceCount = $remarks.Length - $remarks.TrimStart().Length
+            # $example['Remarks'] = $remarks -replace $newLine, '~~~' -replace "\s{$extraWhitespaceCount}", '' -replace '~~~', $newLine
+            $example['Remarks'] = $examples[$i].remarks | ConvertTo-PsHelpText
         }
 
         $content['Examples'] += $example
@@ -584,6 +703,11 @@ foreach ($member in $members)
             'Examples'
             {
                 $pair.Value | ForEach-Object {
+                    if ($_.Index -gt 1)
+                    {
+                        $text += ''
+                    }
+
                     $text += ('--------------------- Example {0} ---------------------' -f $_.Index) | Format-Text -MaxLineWidth $MaxLineWidth -TabCount 1
 
                     if (-not [string]::IsNullOrWhiteSpace($_.Title))
@@ -606,7 +730,7 @@ foreach ($member in $members)
             }
             default
             {
-                $text += $pair.Value | Format-Text -MaxLineWidth $MaxLineWidth -TabCount 1
+                $text += $pair.Value.split($newLine) | Format-Text -MaxLineWidth $MaxLineWidth -TabCount 1
             }
         }
 
@@ -647,6 +771,6 @@ foreach ($file in $helpFiles)
     }
 
     $content += $topics | Where-Object { $_ -ne $file.Name.Split('.')[0] } | Format-Text -MaxLineWidth $MaxLineWidth -TabCount 1
-    $content | Out-File -FilePath $file.FullName -Force
+    $content -replace "`t", '    ' | Out-File -FilePath $file.FullName -Force
 }
 #endregion

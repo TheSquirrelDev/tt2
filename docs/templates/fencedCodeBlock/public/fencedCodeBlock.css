@@ -1,0 +1,85 @@
+:root {
+    --fc-border-color: var(--bs-border-color);
+    --fc-header-background-color: var(--bs-border-color);
+    --fc-header-color: var(--bs-secondary-color);
+    --fc-copy-hover-background-color: var(--bs-body-bg);
+    --fc-copy-success-background-color: var(--bs-success);
+    --fc-copy-success-color: var(--bs-success-border-subtle);
+    --fc-copy-success-alert-time: 500ms;
+    --fc-code-background-color: var(--bs-tertiary-bg);
+}
+
+.fc-header {
+  box-sizing: content-box;
+  background-color: var(--fc-header-background-color);
+  color: var(--fc-header-color);
+  display: flex;
+  flex-direction: row;
+  font-size: 0.8rem;
+  border-bottom: 0;
+  margin-top: 0;
+  min-height: 30px;
+}
+
+.fc-header .language {
+  padding: 2px 16px;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+
+.fc-copy {
+  padding: 2px 10px;
+  background-color: transparent;
+  border: .125rem solid var(--fc-header-background-color);
+  border-left-width: 1px;
+  color: var(--fc-header-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  line-height: normal;
+}
+
+.fc-copy:hover {
+  background-color: var(--fc-copy-hover-background-color);
+}
+
+.fc-copy:focus-visible {
+  z-index: 3;
+}
+
+.fc-copy > .bi-copy {
+  margin-inline-end: .5rem;
+}
+
+.fc-copy .successful-copy-alert {
+  background-color: var(--fc-copy-success-background-color);
+  color: var(--fc-copy-success-color);
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  inset-block-start: 0;
+  inset-block-end: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fc-copy .successful-copy-alert.is-transparent {
+  opacity: 0;
+  transition: var(--fc-copy-success-alert-time) opacity ease-in-out;
+}
+
+.fc-copy .successful-copy-alert > .bi-check-lg {
+  font-size: x-large;
+}
+
+.fc pre {
+  display: flex;
+  border: 1px solid var(--fc-border-color);
+  margin: 0;
+}
+
+.fc pre > code {
+  width: 100%;
+  background-color: var(--fc-code-background-color) !important;
+}

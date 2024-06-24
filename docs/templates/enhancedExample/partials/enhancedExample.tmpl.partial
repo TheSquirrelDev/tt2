@@ -1,0 +1,26 @@
+<div id="example_{{index}}" class="card enhancedExample">
+    {{#summary}}
+    <div class="card-header">{{{summary}}}</div>
+    {{/summary}}
+
+    {{#codeBlocks.0}}
+    <div class="card-body" id="example_{{exampleIndex}}_code">
+        <div role="tablist" class="automatic nav nav-tabs">
+            {{#codeBlocks}}
+            <button class="nav-link" id="example_{{exampleIndex}}_{{language}}_tab" type="button" role="tab" aria-selected="false" aria-controls="example_{{exampleIndex}}_{{language}}_tabpanel" data-link="{{language}}">
+                <span>{{displayLanguage}}</span>
+            </button>
+            {{/codeBlocks}}
+        </div>
+        {{#codeBlocks}}
+        <div id="example_{{exampleIndex}}_{{language}}_tabpanel" role="tabpanel" tabindex="{{codeIndex}}">
+            {{{code}}}
+        </div>
+        {{/codeBlocks}}
+    </div>
+    {{/codeBlocks.0}}
+
+    {{#remarks}}
+    <div class="card-footer">{{{remarks}}}</div>
+    {{/remarks}}
+</div>

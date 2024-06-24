@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  
+
   <PropertyGroup>
     <TargetFrameworks>net8.0;net7.0;net6.0;net462</TargetFrameworks>
     <AssemblyName>IOInfoExtensions.PowerShell.Tests</AssemblyName>
@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\IOInfoExtensions.PowerShell\IOInfoExtensions.PowerShell.csproj" />
+    <ProjectReference Include="..\..\src\IOInfoExtensions.PowerShell\IOInfoExtensions.PowerShell.csproj" />
     <ProjectReference Include="..\IOInfoExtensions.TestUtilities\IOInfoExtensions.TestUtilities.csproj" />
   </ItemGroup>
 
@@ -61,9 +61,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-  
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="pwsh $(MSBuildProjectDirectory)/../../IOInfoExtensions.PowerShell/Copy-ModuleFiles.ps1 -BinaryOutputDirectory $(OutDir) -ProjectDirectory $(ProjectDir) -ModuleRootDirectory $(OutDir)" />
+    <Exec Command="pwsh $(MSBuildProjectDirectory)/../../src/IOInfoExtensions.PowerShell/Copy-ModuleFiles.ps1 -BinaryOutputDirectory $(OutDir) -ProjectDirectory $(ProjectDir) -ModuleRootDirectory $(OutDir)" />
   </Target>
-  
+
 </Project>

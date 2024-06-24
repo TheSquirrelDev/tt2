@@ -11,16 +11,20 @@ namespace IOInfoExtensions
     public static class DirectoryInfoExtensions
     {
         /// <summary>
-        ///     Returns a DirectoryInfo object for a child directory with the specified name.
+        ///     Returns a <c>DirectoryInfo</c> object for a child directory with the specified name.
         /// </summary>
         /// <remarks>
-        ///     Creates a new DirectoryInfo object representing a child directory of the calling DirectoryInfo object that
-        ///     has the specified name.
-        ///
-        ///     The newly created DirectoryInfo object will be checked against the remaining parameters
-        ///     as specified then returned.
-        ///
-        ///     Specifying nested directories in the name is supported.
+        ///     <para>
+        ///         Creates a new <c>DirectoryInfo</c> object representing a child directory of the
+        ///         calling <c>DirectoryInfo</c> object that has the specified name.
+        ///     </para>
+        ///     <para>
+        ///         The newly created <c>DirectoryInfo</c> object will be checked against the remaining parameters
+        ///         as specified then returned.
+        ///     </para>
+        ///     <para>
+        ///         Specifying nested directories in the name is supported.
+        ///     </para>
         /// </remarks>
         /// <param name="directory">The calling DirectoryInfo object that will be the parent of the returned DirectoryInfo object.</param>
         /// <param name="name">The name of the child directory to return.</param>
@@ -28,10 +32,12 @@ namespace IOInfoExtensions
         /// <param name="ignoreCase">If set to false, it will throw an error if a matching child directory is found but with a different case.</param>
         /// <returns>System.IO.DirectoryInfo</returns>
         /// <example>
-        ///     <title>Get an existing child directory by specifying only the directory name using the correct casing.</title>
+        ///     <summary>Get an existing child directory by specifying only the directory name using the correct casing.</summary>
         ///     <remarks>
-        ///         This returns a DirectoryInfo object for the child directory named "ChildDir1" in the given directory.
-        ///         It uses default values for the [resolve] and [ignoreCase] parameters.
+        ///         <para>
+        ///             This returns a <c>DirectoryInfo</c> object for the child directory named <i>ChildDir1</i> in the given directory.
+        ///             It uses default values for the <c>resolve</c> and <c>ignoreCase</c> parameters.
+        ///         </para>
         ///     </remarks>
         ///     <code language="csharp">
         ///         var demoRoot = new DirectoryInfo("C:\\Demo");
@@ -79,10 +85,10 @@ namespace IOInfoExtensions
         ///     </code>
         /// </example>
         /// <example>
-        ///     <title>Get a non-existing child directory by specifying only the directory name.</title>
+        ///     <summary>Get a non-existing child directory by specifying only the directory name.</summary>
         ///     <remarks>
-        ///         This returns a DirectoryInfo object for the child directory named "ChildDir3\InnerChildDir3" in the given directory.
-        ///         It uses default values for the [resolve] and [ignoreCase] parameters.
+        ///         This returns a <c>DirectoryInfo</c> object for the child directory named <i>ChildDir3\InnerChildDir3</i> in the given directory.
+        ///         It uses default values for the <c>resolve</c> and <c>ignoreCase</c> parameters.
         ///     </remarks>
         ///     <code language="csharp">
         ///         var demoRoot = new DirectoryInfo("C:\\Demo");
@@ -115,10 +121,10 @@ namespace IOInfoExtensions
         ///     <code language="powershell">
         ///         PS> $directory = New-Object System.IO.DirectoryInfo 'C:\Demo'
         ///         PS> $directory.GetFileSystemInfos().FullName
-        ///                     C:\Demo\ChildDir1
-        ///                     C:\Demo\ChildDir2
-        ///                     C:\Demo\ChildFile1.txt
-        ///                     C:\Demo\ChildFile2.txt
+        ///             C:\Demo\ChildDir1
+        ///             C:\Demo\ChildDir2
+        ///             C:\Demo\ChildFile1.txt
+        ///             C:\Demo\ChildFile2.txt
         ///
         ///         PS> $child = $directory.GetDirectory('ChildDir3\InnerChildDir3')
         ///         PS> $child.FullName
@@ -183,13 +189,34 @@ namespace IOInfoExtensions
         }
 
         /// <summary>
-        ///    Returns a FileInfo object for the child file with the specified name.
+        ///    Returns a <c>FileInfo</c> object for the child file with the specified name.
         /// </summary>
         /// <param name="directory">The calling DirectoryInfo object that will be the parent of the returned FileInfo object.</param>
         /// <param name="name">The name of the child file to return.</param>
         /// <param name="resolve">If set to true, it will throw an error if a matching child file is not found.</param>
         /// <param name="ignoreCase">If set to false, it will throw an error if a matching child directory is found but with a different case.</param>
         /// <returns>System.IO.FileInfo</returns>
+        /// <example title="Example 1">
+        ///     Returns the FileInfo object of an existing child file.
+        ///     <code language="powershell">
+        ///         PS> $directory = New-Object System.IO.DirectoryInfo 'C:\Demo'
+        ///         PS> $directory.GetFileSystemInfos().FullName
+        ///             C:\Demo\ChildDir1
+        ///             C:\Demo\ChildDir2
+        ///             C:\Demo\ChildFile1.txt
+        ///             C:\Demo\ChildFile2.txt
+        ///
+        ///         PS> $child = $directory.GetFile('childfile1.txt')
+        ///         PS> $child.FullName
+        ///             C:\Demo\childfile1.txt
+        ///
+        ///         PS> $child.GetType().FullName
+        ///             System.IO.FileInfo
+        ///
+        ///         PS> $child.Exists
+        ///             True
+        ///     </code>
+        /// </example>
         /// <exception cref="ArgumentException">If the given name is null, empty, or just whitespace.</exception>
         /// <exception cref="Exception">If the given name matched multiple child items. This will happen if a wildcard was passed as part of the name.</exception>
         /// <exception cref="FileNotFoundException">If the given name resolves to a child directory, resolve = true and the child file does not exist, or if ignoreCase = false and the casing doesn't match.</exception>

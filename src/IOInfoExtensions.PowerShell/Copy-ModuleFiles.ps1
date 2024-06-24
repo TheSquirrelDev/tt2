@@ -73,7 +73,7 @@ while ($null -eq $solutionDirectory)
     }
 }
 
-$moduleSource = Join-Path -Path $solutionDirectory -ChildPath "$ModuleName\Module" -Resolve
+$moduleSource = Join-Path -Path $solutionDirectory -ChildPath "src\$ModuleName\Module" -Resolve
 if ($moduleSource -eq $moduleDirectory)
 {
     throw "ModuleDirectory cannot be the same as the module source directory"
