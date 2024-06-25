@@ -7,7 +7,7 @@ on:
 
 permissions:
     packages: write
-    
+
 jobs:
   Build_and_Release:
     runs-on: windows-latest
@@ -22,12 +22,13 @@ jobs:
     - name: Build
       run: dotnet build -c Release --no-restore --verbosity normal
     - name: Pack c#
-      run: dotnet pack -c Release --no-build --output . IOInfoExtensions
+      run: dotnet pack -c Release --no-build --output .\Output .\src\IOInfoExtensions
     - name: Publish c# Module
-      run: dotnet nuget push "*.nupkg" --api-key ${{ secrets.NUGET }} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push ".\Output*.nupkg" --api-key ${{ secrets.NUGET }} --source https://api.nuget.org/v3/index.json
     - name: Publish PowerShell Module
       shell: pwsh
       run: |
-        .\IOInfoExtensions.PowerShell\Copy-ModuleFiles.ps1 -BinaryOutputDirectory .\IOInfoExtensions.PowerShell\bin\Release\netstandard2.0 -ProjectDirectory .\IOInfoExtensions.PowerShell -ModuleRootDirectory .\Output
+        .\src\IOInfoExtensions.PowerShell\Copy-ModuleFiles.ps1 -BinaryOutputDirectory .\src\IOInfoExtensions.PowerShell\bin\Release\netstandard2.0 -ProjectDirectory .\src\IOInfoExtensions.PowerShell -ModuleRootDirectory .\Output
+        .\tools\Create-HelpFiles.ps1 -ModuleRootDirectory .\Output\IOInfoExtensions.PowerShell -BinaryOutputDirectory .\src\IOInfoExtensions.PowerShell\bin\Debug\netstandard2.0'
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         $null = Publish-Module -Path .\Output\IOInfoExtensions.PowerShell -NuGetApiKey ${{ secrets.POWERSHELL }}
