@@ -1,0 +1,82 @@
+TOPIC
+    about_IOInfoExtensions.PowerShell
+
+SHORT DESCRIPTION
+    Contains extension methods for System.IO.DirectoryInfo and System.IO.FileInfo classes.
+
+LONG DESCRIPTION
+    This module, IOInfoExtensions.PowerShell, is a wrapper around the IOInfoExtensions project.
+    It is a few quality of life extension methods for the System.IO.DirectoryInfo and
+    System.IO.FileInfo classes that I was tired of rewriting for different projects.
+
+    I found that instead of passing strings for paths you can make the parameter type
+    either a DirectoryInfo or FileInfo object and leverage DotNet's built-in methods.
+
+EXAMPLES
+    For a brief example, let's examine the following function. It requires a filepath and
+    directorypath. Instead of setting the parameter types to [string] we will use
+    [System.IO.FileInfo] and [System.IO.DirectoryInfo] to take advantage of their existing
+    methods.
+
+    Note: This example does use extension methods found in this module.
+
+    function Copy-FileToDirectory
+    {
+        [CmdletBinding()]
+        param
+        (
+            [Parameter(Mandatory = $true)]
+            [System.IO.FileInfo]
+            $FileToCopy,
+
+            [Parameter(Mandatory = $true)]
+            [System.IO.DirectoryInfo]
+            $DestinationDirectory,
+
+            [Parameter()]
+            [AllowNull()]
+            [AllowEmptyString()]
+            [string]
+            $NewName
+
+            [Parameter()]
+            [switch]
+            $Force
+        )
+
+        # The .Exists property is a boolean indicating if the file/directory exists or not.
+        # No need to use Test-Path/Resolve-Path
+        if (-not $FileToCopy.Exists)
+        {
+            throw "The source file '$($FileToCopy.FullName)' does not exist"
+        }
+
+        # The DotNet method .Create() will create the full path of directories
+        # if needed. It's also safe to run even if the directory already exists
+        # so no need to Test-Path or .Exists before running Create
+        $DestinationDirectory.Create()
+
+        # The FileInfo object has a .Name property we can use to get just the filename.
+        # No need for Split-Path -Leaf
+        if ([string]::IsNullOrWhiteSpace($NewName))
+        {
+            $NewName = $FileToCopy.Name
+        }
+
+        # GetFile and CopyFrom are extension methods from this module
+        $newFile = $DestinationDirectory.GetFile($NewName)
+        $newFile.CopyFrom($FileToCopy, $Force)
+    }
+
+    # Call the function. We can just pass a string into the function
+    # and PowerShells type casting will automatically make them into
+    # the DirectoryInfo and FileInfo objects.
+    Copy-FileToDirectory -FileToCopy '.\file_to_copy.txt' -DestinationDirectory '..\..\someDirectory' -NewName 'fresh.txt'
+    Copy-FileToDirectory -FileToCopy '.\file_to_copy.txt' -DestinationDirectory '..\..\someDirectory' -NewName 'fresh.txt' -Force
+
+KEYWORDS
+    IOInfoExtensions, IOInfoExtensions.PowerShell,
+    System.IO.FileInfo, System.IO.DirectoryInfo,
+    FileInfo, DirectoryInfo
+
+SEE ALSO

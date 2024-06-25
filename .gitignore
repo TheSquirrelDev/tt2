@@ -396,3 +396,11 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Staging directory
+Output
+
+# DocFX
+docs
+!docs/docfx.json
+!docs/templates/

@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net7.0;net6.0;net462</TargetFrameworks>
+    <AssemblyName>IOInfoExtensions.PowerShell.Tests</AssemblyName>
+    <TargetPlatform>x64</TargetPlatform>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\IOInfoExtensions.PowerShell\IOInfoExtensions.PowerShell.csproj" />
+    <ProjectReference Include="..\IOInfoExtensions.TestUtilities\IOInfoExtensions.TestUtilities.csproj" />
+  </ItemGroup>
+
+  <!-- PowerShell 7.4.x -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
+    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.4.1" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
+    <DefineConstants>$(DefineConstants);PSV74</DefineConstants>
+  </PropertyGroup>
+
+  <!-- PowerShell 7.3.x -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net7.0' ">
+    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.3.11" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net7.0' ">
+    <DefineConstants>$(DefineConstants);PSV73</DefineConstants>
+  </PropertyGroup>
+
+  <!-- PowerShell 7.2.x -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.2.18" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+    <DefineConstants>$(DefineConstants);PSV72</DefineConstants>
+  </PropertyGroup>
+
+  <!-- Windows PowerShell 5.1 -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
+    <PackageReference Include="Microsoft.PowerShell.5.ReferenceAssemblies" Version="1.1.0" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net462' ">
+    <DefineConstants>$(DefineConstants);PSV51</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="FluentAssertions" Version="6.12.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
+    <PackageReference Include="xunit" Version="2.7.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="pwsh $(MSBuildProjectDirectory)/../../src/IOInfoExtensions.PowerShell/Copy-ModuleFiles.ps1 -BinaryOutputDirectory $(OutDir) -ProjectDirectory $(ProjectDir) -ModuleRootDirectory $(OutDir)" />
+  </Target>
+
+</Project>

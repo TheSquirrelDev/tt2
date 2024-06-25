@@ -20,5 +20,9 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Test
+    - name: Test C#
       run: dotnet test --no-build --verbosity normal
+    - name: Test PowerShell Meta
+      run: |
+        $ErrorActionPreference = "Stop"
+        Get-ChildItem -Path .\ -Exclude *.psd1 | Invoke-ScriptAnalyzer

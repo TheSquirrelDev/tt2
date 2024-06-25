@@ -1,0 +1,33 @@
+name: Release Artifacts
+
+on:
+  release:
+    types: [published]
+
+permissions:
+    packages: write
+
+jobs:
+  Build_and_Release:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build -c Release --no-restore --verbosity normal
+    - name: Pack c#
+      run: dotnet pack -c Release --no-build --output .\Output .\src\IOInfoExtensions
+    - name: Publish c# Module
+      run: dotnet nuget push ".\Output\*.nupkg" --api-key ${{ secrets.NUGET }} --source https://api.nuget.org/v3/index.json  --skip-duplicate
+    - name: Publish PowerShell Module
+      shell: pwsh
+      run: |
+        .\src\IOInfoExtensions.PowerShell\Copy-ModuleFiles.ps1 -BinaryOutputDirectory .\src\IOInfoExtensions.PowerShell\bin\Release\netstandard2.0 -ProjectDirectory .\src\IOInfoExtensions.PowerShell -ModuleRootDirectory .\Output
+        .\tools\Create-HelpFiles.ps1 -ModuleDirectory .\Output\IOInfoExtensions.PowerShell -BinaryOutputDirectory .\src\IOInfoExtensions.PowerShell\bin\Release\netstandard2.0
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        $null = Publish-Module -Path .\Output\IOInfoExtensions.PowerShell -NuGetApiKey ${{ secrets.POWERSHELL }}

@@ -1,0 +1,49 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "../src",
+          "files": [
+            "**.csproj"
+          ]
+        }
+      ],
+      "dest": "_api",
+      "memberLayout": "separatePages",
+      "disableGitFeatures": true,
+      "shouldSkipMarkup": true
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**/*.{md,yml}"
+        ],
+        "exclude": [
+          "_site/**"
+        ]
+      }
+    ],
+    "resource": [],
+    "output": "_site",
+    "disableGitFeatures": true,
+    "markdownEngineName": "markdig",
+    "template": [
+      "default",
+      "modern",
+      "templates/enhancedExample",
+      "templates/fencedCodeBlock",
+      "templates/IOInfoExtensions"
+    ],
+    "globalMetadata": {
+      "_appName": "IOInfoExtensions",
+      "_appTitle": "IOInfoExtensions",
+      "_enableSearch": true,
+      "tocToggleButton": true,
+      "pdf": false,
+      "_lang": "en-US"
+    }
+  }
+}
