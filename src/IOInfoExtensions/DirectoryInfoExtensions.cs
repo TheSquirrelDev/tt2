@@ -138,7 +138,7 @@ namespace IOInfoExtensions
         ///     </code>
         /// </example>
         /// <example>
-        ///     <summary>Get child directory with wrong case while Resolve is true.</summary>
+        ///     <summary>Get child directory with wrong case while Resolve is set to true.</summary>
         ///     <remarks>Throws an exception because the child directory does not exist and Resolve is set to true.</remarks>
         ///     <code language="powershell">
         ///         PS> $directory = New-Object System.IO.DirectoryInfo 'C:\Demo'
