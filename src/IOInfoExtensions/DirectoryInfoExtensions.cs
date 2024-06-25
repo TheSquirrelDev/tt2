@@ -139,6 +139,7 @@ namespace IOInfoExtensions
         /// </example>
         /// <example>
         ///     <summary>Get child directory with wrong case while Resolve is true.</summary>
+        ///     <remarks>Throws an exception because the child directory does not exist and Resolve is set to true.</remarks>
         ///     <code language="powershell">
         ///         PS> $directory = New-Object System.IO.DirectoryInfo 'C:\Demo'
         ///         PS> $directory.GetFileSystemInfos().FullName
@@ -154,8 +155,6 @@ namespace IOInfoExtensions
         ///             + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         ///                 + CategoryInfo          : NotSpecified: (:) [], MethodInvocationException
         ///                 + FullyQualifiedErrorId : ScriptMethodRuntimeException
-        ///
-        ///         Throws an exception because the child directory does not exist and Resolve is set to true.
         ///     </code>
         /// </example>
         /// <exception cref="ArgumentException">If the given name is null, empty, or just whitespace.</exception>
