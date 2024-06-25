@@ -37,7 +37,6 @@
       "templates/fencedCodeBlock",
       "templates/IOInfoExtensions"
     ],
-    // "postProcessors": ["FencedCodeBlock"],
     "globalMetadata": {
       "_appName": "IOInfoExtensions",
       "_appTitle": "IOInfoExtensions",

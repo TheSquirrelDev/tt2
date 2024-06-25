@@ -24,7 +24,7 @@ jobs:
     - name: Pack c#
       run: dotnet pack -c Release --no-build --output .\Output .\src\IOInfoExtensions
     - name: Publish c# Module
-      run: dotnet nuget push ".\Output*.nupkg" --api-key ${{ secrets.NUGET }} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push ".\Output\*.nupkg" --api-key ${{ secrets.NUGET }} --source https://api.nuget.org/v3/index.json
     - name: Publish PowerShell Module
       shell: pwsh
       run: |
