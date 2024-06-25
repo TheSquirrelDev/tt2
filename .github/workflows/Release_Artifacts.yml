@@ -29,6 +29,6 @@ jobs:
       shell: pwsh
       run: |
         .\src\IOInfoExtensions.PowerShell\Copy-ModuleFiles.ps1 -BinaryOutputDirectory .\src\IOInfoExtensions.PowerShell\bin\Release\netstandard2.0 -ProjectDirectory .\src\IOInfoExtensions.PowerShell -ModuleRootDirectory .\Output
-        .\tools\Create-HelpFiles.ps1 -ModuleRootDirectory .\Output\IOInfoExtensions.PowerShell -BinaryOutputDirectory .\src\IOInfoExtensions.PowerShell\bin\Debug\netstandard2.0'
+        .\tools\Create-HelpFiles.ps1 -ModuleRootDirectory .\Output\IOInfoExtensions.PowerShell -BinaryOutputDirectory .\src\IOInfoExtensions.PowerShell\bin\Debug\netstandard2.0
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         $null = Publish-Module -Path .\Output\IOInfoExtensions.PowerShell -NuGetApiKey ${{ secrets.POWERSHELL }}

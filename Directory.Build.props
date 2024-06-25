@@ -10,7 +10,7 @@
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <AnalysisLevel>latest</AnalysisLevel>
-    <Version>0.0.3</Version>
+    <Version>0.0.4</Version>
     <FileVersion>0.0.7</FileVersion>
   </PropertyGroup>
 
