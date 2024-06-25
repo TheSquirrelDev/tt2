@@ -1,9 +1,8 @@
 name: Release Artifacts
 
 on:
-  # release:
-  #   types: [published]
-  [pull_request]
+  release:
+    types: [published]
 
 permissions:
     packages: write
