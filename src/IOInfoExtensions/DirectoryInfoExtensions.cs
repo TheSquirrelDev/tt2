@@ -196,7 +196,7 @@ namespace IOInfoExtensions
         /// <param name="resolve">If set to true, it will throw an error if a matching child file is not found.</param>
         /// <param name="ignoreCase">If set to false, it will throw an error if a matching child directory is found but with a different case.</param>
         /// <returns>System.IO.FileInfo</returns>
-        /// <example title="Example 1">
+        /// <example>
         ///     Returns the FileInfo object of an existing child file.
         ///     <code language="powershell">
         ///         PS> $directory = New-Object System.IO.DirectoryInfo 'C:\Demo'
