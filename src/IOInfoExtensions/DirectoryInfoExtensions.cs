@@ -137,6 +137,27 @@ namespace IOInfoExtensions
         ///             False
         ///     </code>
         /// </example>
+        /// <example>
+        ///     <summary>Get child directory with wrong case while Resolve is true.</summary>
+        ///     <code language="powershell">
+        ///         PS> $directory = New-Object System.IO.DirectoryInfo 'C:\Demo'
+        ///         PS> $directory.GetFileSystemInfos().FullName
+        ///             C:\Demo\ChildDir1
+        ///             C:\Demo\ChildDir2
+        ///             C:\Demo\ChildFile1.txt
+        ///             C:\Demo\ChildFile2.txt
+        ///
+        ///         PS> $child = $directory.GetDirectory('childdir3', $true)
+        ///             Exception calling "GetDirectory" with "2" argument(s): "Cannot find path 'C:\Demo\childdir3' because it does not exist."
+        ///             At line:1 char:1
+        ///             + $child = $directory.GetDirectory('childdir3', $true)
+        ///             + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ///                 + CategoryInfo          : NotSpecified: (:) [], MethodInvocationException
+        ///                 + FullyQualifiedErrorId : ScriptMethodRuntimeException
+        ///
+        ///         Throws an exception because the child directory does not exist and Resolve is set to true.
+        ///     </code>
+        /// </example>
         /// <exception cref="ArgumentException">If the given name is null, empty, or just whitespace.</exception>
         /// <exception cref="Exception">If the given name matched multiple child items. This will happen if a wildcard was passed as part of the name.</exception>
         /// <exception cref="DirectoryNotFoundException">If the given name resolves to a child file, resolve = true and the child directory does not exist, or if ignoreCase = false and the casing doesn't match.</exception>
