@@ -66,22 +66,22 @@ namespace IOInfoExtensions
         ///          */
         ///     </code>
         ///     <code language="powershell">
-        ///         PS> $directory = New-Object System.IO.DirectoryInfo 'C:\Demo'
-        ///         PS> $directory.GetFileSystemInfos().FullName
-        ///             C:\Demo\ChildDir1
-        ///             C:\Demo\ChildDir2
-        ///             C:\Demo\ChildFile1.txt
-        ///             C:\Demo\ChildFile2.txt
+        ///         $directory = New-Object System.IO.DirectoryInfo 'C:\Demo'
+        ///         $directory.GetFileSystemInfos().FullName
+        ///         #    C:\Demo\ChildDir1
+        ///         #    C:\Demo\ChildDir2
+        ///         #    C:\Demo\ChildFile1.txt
+        ///         #    C:\Demo\ChildFile2.txt
         ///
-        ///         PS> $child = $directory.GetDirectory('ChildDir1')
-        ///         PS> $child.FullName
-        ///             C:\Demo\ChildDir1
+        ///         $child = $directory.GetDirectory('ChildDir1')
+        ///         $child.FullName
+        ///         #    C:\Demo\ChildDir1
         ///
-        ///         PS> $child.GetType().FullName
-        ///             System.IO.DirectoryInfo
+        ///         $child.GetType().FullName
+        ///         #    System.IO.DirectoryInfo
         ///
-        ///         PS> $child.Exists
-        ///             True
+        ///         $child.Exists
+        ///         #    True
         ///     </code>
         /// </example>
         /// <example>
