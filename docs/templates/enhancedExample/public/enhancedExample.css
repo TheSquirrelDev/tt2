@@ -2,3 +2,10 @@
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
+
+* {
+  overflow-anchor: none !important;
+  scroll-snap-stop: normal !important;
+  overscroll-behavior: unset !important;
+  scroll-behavior: unset !important;
+}

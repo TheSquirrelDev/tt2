@@ -66,22 +66,22 @@ namespace IOInfoExtensions
         ///          */
         ///     </code>
         ///     <code language="powershell">
-        ///         PS> $directory = New-Object System.IO.DirectoryInfo 'C:\Demo'
-        ///         PS> $directory.GetFileSystemInfos().FullName
-        ///             C:\Demo\ChildDir1
-        ///             C:\Demo\ChildDir2
-        ///             C:\Demo\ChildFile1.txt
-        ///             C:\Demo\ChildFile2.txt
+        ///         $directory = New-Object System.IO.DirectoryInfo 'C:\Demo'
+        ///         $directory.GetFileSystemInfos().FullName
+        ///         #    C:\Demo\ChildDir1
+        ///         #    C:\Demo\ChildDir2
+        ///         #    C:\Demo\ChildFile1.txt
+        ///         #    C:\Demo\ChildFile2.txt
         ///
-        ///         PS> $child = $directory.GetDirectory('ChildDir1')
-        ///         PS> $child.FullName
-        ///             C:\Demo\ChildDir1
+        ///         $child = $directory.GetDirectory('ChildDir1')
+        ///         $child.FullName
+        ///         #    C:\Demo\ChildDir1
         ///
-        ///         PS> $child.GetType().FullName
-        ///             System.IO.DirectoryInfo
+        ///         $child.GetType().FullName
+        ///         #    System.IO.DirectoryInfo
         ///
-        ///         PS> $child.Exists
-        ///             True
+        ///         $child.Exists
+        ///         #    True
         ///     </code>
         /// </example>
         /// <example>
@@ -135,6 +135,26 @@ namespace IOInfoExtensions
         ///
         ///         PS> $child.Exists
         ///             False
+        ///     </code>
+        /// </example>
+        /// <example>
+        ///     <summary>Get child directory with wrong case while Resolve is set to true.</summary>
+        ///     <remarks>Throws an exception because the child directory does not exist and Resolve is set to true.</remarks>
+        ///     <code language="powershell">
+        ///         PS> $directory = New-Object System.IO.DirectoryInfo 'C:\Demo'
+        ///         PS> $directory.GetFileSystemInfos().FullName
+        ///             C:\Demo\ChildDir1
+        ///             C:\Demo\ChildDir2
+        ///             C:\Demo\ChildFile1.txt
+        ///             C:\Demo\ChildFile2.txt
+        ///
+        ///         PS> $child = $directory.GetDirectory('childdir3', $true)
+        ///             Exception calling "GetDirectory" with "2" argument(s): "Cannot find path 'C:\Demo\childdir3' because it does not exist."
+        ///             At line:1 char:1
+        ///             + $child = $directory.GetDirectory('childdir3', $true)
+        ///             + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ///                 + CategoryInfo          : NotSpecified: (:) [], MethodInvocationException
+        ///                 + FullyQualifiedErrorId : ScriptMethodRuntimeException
         ///     </code>
         /// </example>
         /// <exception cref="ArgumentException">If the given name is null, empty, or just whitespace.</exception>
@@ -196,7 +216,7 @@ namespace IOInfoExtensions
         /// <param name="resolve">If set to true, it will throw an error if a matching child file is not found.</param>
         /// <param name="ignoreCase">If set to false, it will throw an error if a matching child directory is found but with a different case.</param>
         /// <returns>System.IO.FileInfo</returns>
-        /// <example title="Example 1">
+        /// <example>
         ///     Returns the FileInfo object of an existing child file.
         ///     <code language="powershell">
         ///         PS> $directory = New-Object System.IO.DirectoryInfo 'C:\Demo'

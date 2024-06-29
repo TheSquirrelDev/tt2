@@ -45,9 +45,6 @@ class TabGroup {
                 tab.classList.add('active')
                 this.tabpanels[i].removeAttribute('hidden');
                 this.tabpanels[i].removeAttribute('aria-hidden');
-                if (setFocus) {
-                    tab.focus();
-                }
             } else {
                 tab.setAttribute('aria-selected', 'false');
                 tab.setAttribute('tabIndex', '-1');
@@ -58,7 +55,7 @@ class TabGroup {
         }
 
         if (setFocus) {
-            this.tablistNode.dispatchEvent(new CustomEvent('tabChanged', { detail: currentTab.getAttribute('data-link') }));
+            this.tablistNode.dispatchEvent(new CustomEvent('tabChanged', { detail: {dataLink: currentTab.getAttribute('data-link'), caller: currentTab.id }}));
         }
     }
 
@@ -136,9 +133,15 @@ class TabGroup {
 let tabGroups = [];
 
 function alertTabChange(event) {
+    var caller = document.getElementById(event.detail.caller);
+    var originalTop = caller.getBoundingClientRect().top;
+
     for(var i = 0; i < tabGroups.length; i++) {
-        tabGroups[i].setSelectedTabByData(event.detail);
+        tabGroups[i].setSelectedTabByData(event.detail.dataLink);
     }
+
+    var currentTop = caller.getBoundingClientRect().top;
+    window.scrollTo(0, window.scrollY + currentTop - originalTop)
 }
 
 function register() {
