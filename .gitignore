@@ -401,6 +401,10 @@ FodyWeavers.xsd
 Output
 
 # DocFX
-docs
+docs/*
 !docs/docfx.json
+!docs/index.md
+!docs/toc.yml
 !docs/templates/
+!docs/templates/*
+!docs/templates/**/*
