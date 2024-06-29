@@ -5,7 +5,7 @@ param
     [System.IO.DirectoryInfo]$ModuleDirectory = 'C:\Projects\tt2\Output\IOInfoExtensions.PowerShell',
 
     [Parameter()]
-    [System.IO.DirectoryInfo]$BinaryOutputDirectory = 'C:\Projects\tt2\src\IOInfoExtensions.PowerShell\bin\Debug\netstandard2.0',
+    [System.IO.DirectoryInfo]$BinaryOutputDirectory = 'C:\Projects\tt2\src\IOInfoExtensions.PowerShell\bin\Release\netstandard2.0',
 
     [Parameter()]
     [string]
@@ -639,13 +639,15 @@ foreach ($member in $members)
             Write-MissingPropertyMessage -PropertyName 'Code' -MemberName $member.Name -MissingPropertyAction $MissingPropertyAction -ExampleIndex $i
         }
 
-        $extraWhitespaceCount = $code.IndexOf('PS>')
+        $firstSpace = $code.TrimStart().IndexOf(' ')
+        $firstContent = $code.TrimStart().Substring(0, $firstSpace)
+        $extraWhitespaceCount = $code.IndexOf($firstContent)
         if ($extraWhitespaceCount -lt 0)
         {
             Write-MissingPropertyMessage -PropertyName 'Code (improperly formatted)' -MemberName $member.Name -MissingPropertyAction $MissingPropertyAction -ExampleIndex $i
         }
 
-        $example['Code'] = $code -replace $newLine, '~~~' -replace "\s{$extraWhitespaceCount}", '' -replace '~~~', $newLine
+        $example['Code'] = $code -replace $newLine, '%%%' -replace "\s{$extraWhitespaceCount}", '' -replace '%%%', $newLine
 
         if ([string]::IsNullOrWhiteSpace($examples[$i].remarks))
         {
@@ -655,7 +657,7 @@ foreach ($member in $members)
         {
             # $remarks = $examples[$i].remarks.Trim($newLine)
             # $extraWhitespaceCount = $remarks.Length - $remarks.TrimStart().Length
-            # $example['Remarks'] = $remarks -replace $newLine, '~~~' -replace "\s{$extraWhitespaceCount}", '' -replace '~~~', $newLine
+            # $example['Remarks'] = $remarks -replace $newLine, '%%%' -replace "\s{$extraWhitespaceCount}", '' -replace '%%%', $newLine
             $example['Remarks'] = $examples[$i].remarks | ConvertTo-PsHelpText
         }
 
