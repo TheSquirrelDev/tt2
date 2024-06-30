@@ -119,42 +119,69 @@ namespace IOInfoExtensions
         ///          */
         ///     </code>
         ///     <code language="powershell">
-        ///         PS> $directory = New-Object System.IO.DirectoryInfo 'C:\Demo'
-        ///         PS> $directory.GetFileSystemInfos().FullName
-        ///             C:\Demo\ChildDir1
-        ///             C:\Demo\ChildDir2
-        ///             C:\Demo\ChildFile1.txt
-        ///             C:\Demo\ChildFile2.txt
+        ///         $directory = New-Object System.IO.DirectoryInfo 'C:\Demo'
+        ///         $directory.GetFileSystemInfos().FullName
+        ///         #    C:\Demo\ChildDir1
+        ///         #    C:\Demo\ChildDir2
+        ///         #    C:\Demo\ChildFile1.txt
+        ///         #    C:\Demo\ChildFile2.txt
         ///
-        ///         PS> $child = $directory.GetDirectory('ChildDir3\InnerChildDir3')
-        ///         PS> $child.FullName
-        ///             C:\Demo\ChildDir3\InnerChildDir3
+        ///         $child = $directory.GetDirectory('ChildDir3\InnerChildDir3')
+        ///         $child.FullName
+        ///         #    C:\Demo\ChildDir3\InnerChildDir3
         ///
-        ///         PS> $child.GetType().FullName
-        ///             System.IO.DirectoryInfo
+        ///         $child.GetType().FullName
+        ///         #    System.IO.DirectoryInfo
         ///
-        ///         PS> $child.Exists
-        ///             False
+        ///         $child.Exists
+        ///         #    False
         ///     </code>
         /// </example>
         /// <example>
-        ///     <summary>Get child directory with wrong case while Resolve is set to true.</summary>
-        ///     <remarks>Throws an exception because the child directory does not exist and Resolve is set to true.</remarks>
-        ///     <code language="powershell">
-        ///         PS> $directory = New-Object System.IO.DirectoryInfo 'C:\Demo'
-        ///         PS> $directory.GetFileSystemInfos().FullName
-        ///             C:\Demo\ChildDir1
-        ///             C:\Demo\ChildDir2
-        ///             C:\Demo\ChildFile1.txt
-        ///             C:\Demo\ChildFile2.txt
+        ///     <summary>Get child directory with wrong case while Resolve is set to true and ignoreCase is false.</summary>
+        ///     <remarks>Throws an exception because the child directory does not exist and Resolve is set to true and ignoreCase is false.</remarks>
+        ///     <code language="csharp">
+        ///         var demoRoot = new DirectoryInfo("C:\\Demo");
         ///
-        ///         PS> $child = $directory.GetDirectory('childdir3', $true)
-        ///             Exception calling "GetDirectory" with "2" argument(s): "Cannot find path 'C:\Demo\childdir3' because it does not exist."
-        ///             At line:1 char:1
-        ///             + $child = $directory.GetDirectory('childdir3', $true)
-        ///             + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        ///                 + CategoryInfo          : NotSpecified: (:) [], MethodInvocationException
-        ///                 + FullyQualifiedErrorId : ScriptMethodRuntimeException
+        ///         Console.WriteLine("First level children:");
+        ///         demoRoot.GetFileSystemInfos().ToList().ForEach(x => Console.WriteLine($"\t{x.FullName}"));
+        ///
+        ///         var c = demoRoot.GetDirectory("childdir1", true, false);
+        ///         Console.WriteLine($"Child FullName:\n\t{c.FullName}");
+        ///         Console.WriteLine($"Child Type:\n\t{c.GetType()}");
+        ///         Console.WriteLine($"Child Exists:\n\t{c.Exists}");
+        ///
+        ///         /*
+        ///          * Output:
+        ///          * Children:
+        ///          *         C:\Demo\ChildDir1
+        ///          *         C:\Demo\ChildDir2
+        ///          *         C:\Demo\ChildFile1.txt
+        ///          *         C:\Demo\ChildFile2.txt
+        ///          * Unhandled exception. System.IO.DirectoryNotFoundException: A child named 'childdir1' already exists but with a different case: ChildDir1.
+        ///          *     at IOInfoExtensions.DirectoryInfoExtensions.GetDirectory(DirectoryInfo directory, String name, Boolean resolve, Boolean ignoreCase)
+        ///          *     at Program.&gt;Main&lt;$(String[] args) in ...
+        ///          */
+        ///     </code>
+        ///     <code language="powershell">
+        ///         $directory = New-Object System.IO.DirectoryInfo 'C:\test\Demo'
+        ///         $directory.GetFileSystemInfos().FullName
+        ///         #    C:\Demo\ChildDir1
+        ///         #    C:\Demo\ChildDir2
+        ///         #    C:\Demo\ChildFile1.txt
+        ///         #    C:\Demo\ChildFile2.txt
+        ///
+        ///         $child = $directory.GetDirectory('childdir1', $true, $false)
+        ///         #    OperationStopped: A child named 'childdir1' already exists but with a different case: ChildDir1.
+        ///
+        ///         $Error[0].Exception.ToString()
+        ///         #   System.IO.DirectoryNotFoundException: A child named 'childdir1' already exists but with a different case: ChildDir1.
+        ///         #      at IOInfoExtensions.DirectoryInfoExtensions.GetDirectory(DirectoryInfo directory, String name, Boolean resolve, Boolean ignoreCase)
+        ///         #      at IOInfoExtensions.PowerShell.ExtensionsWrapper.PSGetDirectory(PSObject directory, String name, Boolean resolve, Boolean ignoreCase)
+        ///         #      at CallSite.Target(Closure, CallSite, Object, String, Boolean, Boolean)
+        ///         #      at System.Dynamic.UpdateDelegates.UpdateAndExecute4[T0,T1,T2,T3,TRet](CallSite site, T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+        ///         #      at System.Management.Automation.Interpreter.DynamicInstruction`5.Run(InterpretedFrame frame)
+        ///         #      at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)
         ///     </code>
         /// </example>
         /// <exception cref="ArgumentException">If the given name is null, empty, or just whitespace.</exception>
